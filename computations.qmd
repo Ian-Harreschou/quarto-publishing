@@ -1,7 +1,7 @@
 ---
 title: Test Publishing to GitHub Pages with Quarto
-execute:
-    freeze: auto
+# execute:
+#     freeze: auto
 
 format:
     html:
