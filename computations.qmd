@@ -14,8 +14,10 @@ jupyter: py_controls
 import numpy as np
 import matplotlib.pyplot as plt
 
-x = np.arange(15)
+x = np.arange(30)
 y = 2 * np.sin(x)
 
+plt.ylabel(r'y')
+plt.xlabel(r'x')
 plt.plot(x,y)
 ```
