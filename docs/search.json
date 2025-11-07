@@ -4,6 +4,6 @@
     "href": "computations.html",
     "title": "Test Publishing to GitHub Pages with Quarto",
     "section": "",
-    "text": "Code\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.arange(60)\ny = 2 * np.sin(x)\n\nplt.ylabel(r'y')\nplt.xlabel(r'x')\nplt.plot(x,y)"
+    "text": "Code\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.arange(60)\ny = 2 * np.sin(x)\n\nplt.ylabel(r'y = 2\\sin{x}')\nplt.xlabel(r'x')\nplt.plot(x,y)"
   }
 ]
