@@ -1,4 +1,9 @@
-/.quarto
-/.quarto/
-**/*.quarto_ipynb
-*_site
+# Quarto cache
+.quarto/
+
+# Ignore Python caches
+__pycache__/
+*.pyc
+
+# Optional: ignore Conda environment
+.env/
