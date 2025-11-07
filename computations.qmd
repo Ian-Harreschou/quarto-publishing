@@ -10,6 +10,10 @@ format:
 jupyter: py_controls
 ---
 
+### Example: Simple Matplotlib Plotting
+
+Take $x \in [0,60]$ and $y = 2\sin{x}$
+
 ```{python}
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,7 +21,7 @@ import matplotlib.pyplot as plt
 x = np.arange(60)
 y = 2 * np.sin(x)
 
-plt.ylabel(r'y = 2\sin{x}')
-plt.xlabel(r'x')
+plt.ylabel(r'$y = 2\sin{x}$')
+plt.xlabel(r'$x$')
 plt.plot(x,y)
 ```
