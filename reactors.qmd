@@ -1,0 +1,18 @@
+---
+title: Test Publishing to GitHub Pages with Quarto (Page 2)
+execute:
+    enabled: true
+    freeze: false
+
+format:
+    html:
+        code-fold: true
+        math: mathjax
+
+jupyter: reactors
+---
+
+```{python}
+x = 2
+print(x)
+```
