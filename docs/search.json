@@ -1,0 +1,9 @@
+[
+  {
+    "objectID": "computations.html",
+    "href": "computations.html",
+    "title": "Test Publishing to GitHub Pages with Quarto",
+    "section": "",
+    "text": "Code\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.arange(30)\ny = 2 * np.sin(x)\n\nplt.ylabel(r'y')\nplt.xlabel(r'x')\nplt.plot(x,y)"
+  }
+]
