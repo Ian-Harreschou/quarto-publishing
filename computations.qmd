@@ -1,0 +1,16 @@
+---
+title: Test Publishing to GitHub Pages with Quarto
+execute:
+    freeze: auto
+
+format:
+    html:
+        code-fold: true
+
+jupyter: py_controls
+---
+
+```{python}
+import numpy as np
+x = np.arange(15)
+```
