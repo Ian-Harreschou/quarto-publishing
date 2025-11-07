@@ -6,6 +6,7 @@ title: Test Publishing to GitHub Pages with Quarto
 format:
     html:
         code-fold: true
+        math: mathjax
 
 jupyter: py_controls
 ---
@@ -21,7 +22,7 @@ import matplotlib.pyplot as plt
 x = np.arange(60)
 y = 2 * np.sin(x)
 
-plt.ylabel(r'$y = 2\\sin{x}$')
+plt.ylabel(r'$y = 2\sin{x}$')
 plt.xlabel(r'$x$')
 plt.plot(x,y)
 ```
