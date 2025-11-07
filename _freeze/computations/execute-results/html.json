@@ -1,8 +1,8 @@
 {
-  "hash": "5bee6e252e43cd9d6735490dff6ba589",
+  "hash": "519acd086cdc8678a555b8926c23e0e2",
   "result": {
     "engine": "jupyter",
-    "markdown": "---\ntitle: Test Publishing to GitHub Pages with Quarto\nexecute:\n    freeze: auto\n\nformat:\n    html:\n        code-fold: true\n\njupyter: py_controls\n---\n\n::: {#f2ce1f78 .cell execution_count=1}\n``` {.python .cell-code}\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.arange(30)\ny = 2 * np.sin(x)\n\nplt.ylabel(r'y')\nplt.xlabel(r'x')\nplt.plot(x,y)\n```\n\n::: {.cell-output .cell-output-display}\n![](computations_files/figure-html/cell-2-output-1.png){width=601 height=429}\n:::\n:::\n\n\n",
+    "markdown": "---\ntitle: Test Publishing to GitHub Pages with Quarto\nexecute:\n    freeze: auto\n\nformat:\n    html:\n        code-fold: true\n\njupyter: py_controls\n---\n\n::: {#e5dd6d96 .cell execution_count=1}\n``` {.python .cell-code}\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.arange(60)\ny = 2 * np.sin(x)\n\nplt.ylabel(r'y')\nplt.xlabel(r'x')\nplt.plot(x,y)\n```\n\n::: {.cell-output .cell-output-display}\n![](computations_files/figure-html/cell-2-output-1.png){width=600 height=429}\n:::\n:::\n\n\n",
     "supporting": [
       "computations_files/figure-html"
     ],

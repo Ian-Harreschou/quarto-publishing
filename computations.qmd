@@ -14,7 +14,7 @@ jupyter: py_controls
 import numpy as np
 import matplotlib.pyplot as plt
 
-x = np.arange(30)
+x = np.arange(60)
 y = 2 * np.sin(x)
 
 plt.ylabel(r'y')
