@@ -1,0 +1,12 @@
+{
+  "hash": "930954fe5e771bacdc4b671b5fcbcf27",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: Test Publishing to GitHub Pages with Quarto\nexecute:\n    freeze: auto\n\nformat:\n    html:\n        code-fold: true\n\njupyter: py_controls\n---\n\n::: {#98aa6ac5 .cell execution_count=1}\n``` {.python .cell-code}\nimport numpy as np\nx = np.arange(15)\n```\n:::\n\n\n",
+    "supporting": [
+      "computations_files/figure-html"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
