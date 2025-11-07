@@ -4,6 +4,6 @@
     "href": "computations.html",
     "title": "Test Publishing to GitHub Pages with Quarto",
     "section": "",
-    "text": "Example: Simple Matplotlib Plotting\nTake \\(x \\in [0,60]\\) and \\(y = 2\\sin{x}\\)\n\n\nCode\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.arange(60)\ny = 2 * np.sin(x)\n\nplt.ylabel(r'$y = 2\\sin{x}$')\nplt.xlabel(r'$x$')\nplt.plot(x,y)"
+    "text": "Example: Simple Matplotlib Plotting\nTake \\(x \\in [0,30]\\) and \\(y_{1} = 2\\sin{x}, y_{2} = 4\\sin{x}\\)\n\n\nCode\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.arange(30)\ny1 = 2 * np.sin(x)\ny2 = 4 * np.sin(x)\n\nplt.ylabel(r'$y$')\nplt.xlabel(r'$x$')\nplt.plot(x,y1, label = r\"$y_{1}$\")\nplt.plot(x,y2, label = r\"$y_{2}$\")\nplt.legend()"
   }
 ]
