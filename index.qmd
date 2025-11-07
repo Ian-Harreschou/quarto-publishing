@@ -1,0 +1,8 @@
+---
+title: "Welcome!"
+format: html
+---
+
+# Welcome to my Quarto site
+
+Use the navigation bar to explore other pages.

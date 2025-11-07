@@ -6,11 +6,12 @@ website:
   title: Hello!
   navbar:
     left:
-    # - href: index.qmd
     - text: "Home"
-    href: computations.qmd
+      href: index.qmd
+    - text: "Topic 1"
+      href: computations.qmd
     - text: "Topic 2"
-    href: reactors.qmd
+      href: reactors.qmd
 
 # execute:
 #   freeze: auto
