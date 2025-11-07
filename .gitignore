@@ -7,3 +7,5 @@ __pycache__/
 
 # Optional: ignore Conda environment
 .env/
+/.quarto/
+**/*.quarto_ipynb

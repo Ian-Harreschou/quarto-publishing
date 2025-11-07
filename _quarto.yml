@@ -7,9 +7,10 @@ website:
   navbar:
     left:
     # - href: index.qmd
-      text: Home
-    - computations.qmd
-    - reactors.qmd
+    - text: "Home"
+    href: computations.qmd
+    - text: "Topic 2"
+    href: reactors.qmd
 
 # execute:
 #   freeze: auto
