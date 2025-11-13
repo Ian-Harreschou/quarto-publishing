@@ -2,6 +2,9 @@ project:
   type: website
   output-dir: docs
 
+execute:
+  cache: false
+
 website:
   navbar:
     left:
@@ -10,7 +13,4 @@ website:
     - text: "Process Control & Simulation"
       href: controls.qmd
     # - text: "Topic 2"
-    #   href: reactors.qmdl
-
-# execute:
-#   freeze: auto
+    #   href: reactors.qmd
