@@ -3,6 +3,7 @@ title: Process Simulation & Control
 
 toc: true
 toc-location: left
+toc-depth: 3
 toc-title: Contents
 
 # number-sections: true
@@ -22,7 +23,7 @@ jupyter: py_controls
 
 ---
 
-**Bode and Root Locus Diagrams of LTI Systems**
+## Bode and Root Locus Diagrams of LTI Systems
 
 This demonstration takes advantage of the `python-control` package, which implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials [here](https://python-control.readthedocs.io/en/0.10.2/index.html).
 
@@ -35,7 +36,7 @@ import control as ctrl
 import matplotlib.pyplot as plt
 ```
 
-## Constructing Transfer Functions
+### Constructing Transfer Functions
 
 Before we look at the behavior of transfer functions, we need to know how to construct them. 
 
@@ -72,7 +73,7 @@ named explicitly as `Gc`, with input `Ysp` and output `Y`.
 
 ---
 
-## Input/Output Responses
+### Input/Output Responses
 
 Once we've constructed transfer functions from some underlying dynamical system, we're typically interested in how the system responds to perturbations such as impulses or step changes. Again, `control` provides a toolkit for this, namely in the `step_response` function.
 
@@ -92,7 +93,7 @@ resp.plot(plot_inputs=True)
 
 ---
 
-## Frequency Analysis - Bode Plots
+### Frequency Analysis - Bode Plots
 
 Recall the utility of Bode plots. They are a graphical tool used to visualize how a given transfer function responds to an oscillatory input, of the form,
 
@@ -116,7 +117,7 @@ ctrl.bode_plot(G1)
 
 ---
 
-## Root Locus Diagrams
+### Root Locus Diagrams
 
 Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies -- usually the controller gain $K_c$. Here, we'll look at a few familiar systems from homework. Consider the following open-loop transfer functions, for two systems under PI-control:
 
@@ -153,4 +154,4 @@ Gol = Gv*Gm*Gp*Gc
 ctrl.root_locus_plot(Gol)
 ```
 
-## References
+### References
