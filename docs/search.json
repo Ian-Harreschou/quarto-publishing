@@ -16,9 +16,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Welcome!",
+    "title": "Welcome to my Quarto site",
     "section": "",
-    "text": "Welcome to my Quarto site\nThis is a hub for personal notes and tutorials in process simulation and control, (…). They closely follow courses taken at the University of Minnesota - Twin Cities.\nUse the navigation bar to explore other pages.\n\nDisclaimer\nThe materials and examples on this site are provided for informational and educational purposes only. They are not intended for commercial, industrial, or research use, and no guarantee is made regarding their accuracy, completeness, or suitability for any specific application. All computations, simulations, and software demonstrations are illustrative in nature and should be verified independently before use in any real-world context."
+    "text": "This is a hub for personal notes and tutorials in process simulation and control, (…). They closely follow courses taken at the University of Minnesota - Twin Cities.\nUse the navigation bar to explore other topics.\n\nDisclaimer\nThe materials and examples on this site are provided for informational and educational purposes only. They are not intended for commercial, industrial, or research use, and no guarantee is made regarding their accuracy, completeness, or suitability for any specific application. All computations, simulations, and software demonstrations are illustrative in nature and should be verified independently before use in any real-world context."
   },
   {
     "objectID": "controls.html#bode-and-root-locus-diagrams-of-lti-systems",
