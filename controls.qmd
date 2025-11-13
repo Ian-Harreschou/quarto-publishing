@@ -1,0 +1,88 @@
+---
+title: Process Simulation & Control
+
+toc: true
+toc-location: left
+
+execute:
+    enabled: true
+    freeze: false
+
+format:
+    html:
+        code-fold: true
+        math: mathjax
+
+jupyter: py_controls
+---
+
+## Bode and Root Locus Diagrams of LTI Systems
+
+This demonstration takes advantage of the `python-control` package, which implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials [here](https://python-control.readthedocs.io/en/0.10.2/index.html).
+
+---
+
+```{python}
+# preamble to import packages (renamed using 'import <package> as <name>')
+import numpy as np
+import control as ctrl
+```
+
+#### Frequency Analysis - Bode Plots
+
+Recall the utility of Bode plots. They are a graphical tool used to visualize how a given transfer function responds to an oscillatory input, of the form,
+
+$$u(t) = A\sin{\omega t + \phi}$$
+
+for a specified amplitude $A$, frequency of oscillation $\omega$, and phase shift $\phi$.
+
+```{python}
+s = ctrl.tf('s') # define 's' as a TransferFunction class
+
+intgr = 1/s
+diffr = s
+
+ctrl.bode_plot(intgr)
+
+ctrl.bode_plot(diffr)
+```
+
+---
+
+#### Root Locus Diagrams
+
+Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies -- usually the controller gain $K_c$. Here, we'll look at a few familiar systems from homework. Consider the following open-loop transfer functions, for two systems under PI-control:
+
+$$L_{1}(s) = \frac{\frac{K_{c}}{1.5}(1.5s+1)}{s(2s+1)(s+1)}$$
+
+$$L_{2}(s) = \frac{\frac{K_{c}}{0.5}(0.5s+1)}{s(2s+1)(s+1)}$$
+
+```{python}
+
+Kc = 1 # placeholder gain to use in tf construction
+
+tau_I = 1.5
+
+Gv = 1 # tf of a gate valve (unity loop)
+Gm = 1 # tf of a measurement device (unity loop)
+
+Gp = 1 / ((2*s+1)*(s + 1)) # tf of the process
+Gc = Kc * (1 + 1 / (tau_I*s)) # tf of the controller
+
+Gol = Gv*Gm*Gp*Gc
+
+ctrl.root_locus_plot(Gol)
+```
+
+```{python}
+
+Kc = 1 # placeholder gain to use in tf construction
+
+tau_I = 1.5
+
+Gc = Kc * (1 + 1 / (tau_I*s)) # tf of the controller
+
+Gol = Gv*Gm*Gp*Gc
+
+ctrl.root_locus_plot(Gol)
+```
