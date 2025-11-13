@@ -10,8 +10,8 @@ website:
       href: index.qmd
     - text: "Topic 1"
       href: computations.qmd
-    - text: "Topic 2"
-      href: reactors.qmd
+    # - text: "Topic 2"
+    #   href: reactors.qmd
 
 # execute:
 #   freeze: auto

@@ -16,6 +16,8 @@ format:
 jupyter: py_controls
 ---
 
+---
+
 ## Bode and Root Locus Diagrams of LTI Systems
 
 This demonstration takes advantage of the `python-control` package, which implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials [here](https://python-control.readthedocs.io/en/0.10.2/index.html).
@@ -28,7 +30,7 @@ import numpy as np
 import control as ctrl
 ```
 
-#### Frequency Analysis - Bode Plots
+### Frequency Analysis - Bode Plots
 
 Recall the utility of Bode plots. They are a graphical tool used to visualize how a given transfer function responds to an oscillatory input, of the form,
 
@@ -49,7 +51,7 @@ ctrl.bode_plot(diffr)
 
 ---
 
-#### Root Locus Diagrams
+### Root Locus Diagrams
 
 Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies -- usually the controller gain $K_c$. Here, we'll look at a few familiar systems from homework. Consider the following open-loop transfer functions, for two systems under PI-control:
 
