@@ -3,13 +3,12 @@ project:
   output-dir: docs
 
 website:
-  title: Hello!
   navbar:
     left:
     - text: "Home"
       href: index.qmd
-    - text: "Topic 1"
-      href: computations.qmd
+    - text: "Process Control & Simulation"
+      href: controls.qmd
     # - text: "Topic 2"
     #   href: reactors.qmd
 
