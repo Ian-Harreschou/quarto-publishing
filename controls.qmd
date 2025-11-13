@@ -22,7 +22,7 @@ jupyter: py_controls
 
 ---
 
-## Bode and Root Locus Diagrams of LTI Systems {.unnumbered .unlisted}
+## Bode and Root Locus Diagrams of LTI Systems {.unlisted}
 
 This demonstration takes advantage of the `python-control` package, which implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials [here](https://python-control.readthedocs.io/en/0.10.2/index.html).
 
@@ -89,6 +89,8 @@ resp = ctrl.step_response(Gp)
 
 resp.plot(plot_inputs=True)
 ```
+
+---
 
 ### Frequency Analysis - Bode Plots
 
