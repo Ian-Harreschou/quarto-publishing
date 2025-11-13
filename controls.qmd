@@ -58,8 +58,6 @@ num = [2.5, 6, 7]
 den = [1, 1.5, 4, 6]
 
 G = ctrl.tf(num, den, name = 'Gc', inputs = ['Ysp'], outputs = ['Y'])
-
-G
 ```
 
 This cell constructs a transfer function 
@@ -94,16 +92,20 @@ Recall the utility of Bode plots. They are a graphical tool used to visualize ho
 
 $$u(t) = A\sin{\omega t + \phi}$$
 
-for a specified amplitude $A$, frequency of oscillation $\omega$, and phase shift $\phi$.
+for a specified amplitude $A$, frequency of oscillation $\omega$, and phase shift $\phi$. The Bode plot shows the magnitude (amplitude ratio) of oscillations that will be observed in the output, as well as the response's phase shift.
 
+These plots quickly show us how "well" the dynamics of our system can keep up with
+
+Consider a transfer function
+$$G(s) = \frac{1}{(\tau_{1}s + 1)(\tau_{2}s + 1)}$$
+
+with two poles ($p_{1}, p_{2}$) at $s = -\frac{1}{\tau_{1}}, -\frac{1}{\tau_{2}}$ for $\tau_{1}, \tau_{2} = 1, \ 10$.
 
 ```{python}
-intgr = 1/s
-diffr = s
+t1, t2 = 1, 10
+G1 = 1 / ((t1*s + 1)*(t2*s + 1))
 
-ctrl.bode_plot(intgr)
-
-ctrl.bode_plot(diffr)
+ctrl.bode_plot(G1)
 ```
 
 ---

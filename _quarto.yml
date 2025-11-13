@@ -10,7 +10,7 @@ website:
     - text: "Process Control & Simulation"
       href: controls.qmd
     # - text: "Topic 2"
-    #   href: reactors.qmd
+    #   href: reactors.qmdl
 
 # execute:
 #   freeze: auto
