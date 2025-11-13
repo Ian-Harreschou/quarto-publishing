@@ -175,11 +175,14 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#constructing-transfer-functions" id="toc-constructing-transfer-functions" class="nav-link active" data-scroll-target="#constructing-transfer-functions">Constructing Transfer Functions</a></li>
+  <li><a href="#bode-and-root-locus-diagrams-of-lti-systems" id="toc-bode-and-root-locus-diagrams-of-lti-systems" class="nav-link active" data-scroll-target="#bode-and-root-locus-diagrams-of-lti-systems">Bode and Root Locus Diagrams of LTI Systems</a>
+  <ul class="collapse">
+  <li><a href="#constructing-transfer-functions" id="toc-constructing-transfer-functions" class="nav-link" data-scroll-target="#constructing-transfer-functions">Constructing Transfer Functions</a></li>
   <li><a href="#inputoutput-responses" id="toc-inputoutput-responses" class="nav-link" data-scroll-target="#inputoutput-responses">Input/Output Responses</a></li>
   <li><a href="#frequency-analysis---bode-plots" id="toc-frequency-analysis---bode-plots" class="nav-link" data-scroll-target="#frequency-analysis---bode-plots">Frequency Analysis - Bode Plots</a></li>
   <li><a href="#root-locus-diagrams" id="toc-root-locus-diagrams" class="nav-link" data-scroll-target="#root-locus-diagrams">Root Locus Diagrams</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul></li>
   </ul>
 </nav>
 </nav>
@@ -210,10 +213,11 @@ window.Quarto = {
 
 
 <hr>
-<p><strong>Bode and Root Locus Diagrams of LTI Systems</strong></p>
+<section id="bode-and-root-locus-diagrams-of-lti-systems" class="level2">
+<h2 class="anchored" data-anchor-id="bode-and-root-locus-diagrams-of-lti-systems">Bode and Root Locus Diagrams of LTI Systems</h2>
 <p>This demonstration takes advantage of the <code>python-control</code> package, which implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials <a href="https://python-control.readthedocs.io/en/0.10.2/index.html">here</a>.</p>
 <hr>
-<div id="4762dc6b" class="cell" data-execution_count="1">
+<div id="8408f4d7" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preamble to import packages (renamed using 'import &lt;package&gt; as &lt;name&gt;')</span></span>
@@ -222,12 +226,12 @@ window.Quarto = {
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<section id="constructing-transfer-functions" class="level2">
-<h2 class="anchored" data-anchor-id="constructing-transfer-functions">Constructing Transfer Functions</h2>
+<section id="constructing-transfer-functions" class="level3">
+<h3 class="anchored" data-anchor-id="constructing-transfer-functions">Constructing Transfer Functions</h3>
 <p>Before we look at the behavior of transfer functions, we need to know how to construct them.</p>
 <p>In the <code>control</code> package we can do this a number of ways–such as via state-space representation–but one of the most intuitive or beginner-friendly methods is by defining our symbolic <span class="math inline">\(s\)</span>, then using standard algebraic operations to build the polynomials of the transfer function <span class="math inline">\(G(s)\)</span>.</p>
 <p><code>control</code> includes a “factory function” <code>tf()</code> to construct objects of the <code>TransferFunction</code> class for this purpose.</p>
-<div id="606c52ed" class="cell" data-execution_count="2">
+<div id="9f57468a" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> ctrl.tf(<span class="st">'s'</span>) <span class="co"># define 's' as a TransferFunction class</span></span>
@@ -239,7 +243,7 @@ window.Quarto = {
 <p><span class="math display">\[G(s) = \frac{1}{2s + 1}\]</span></p>
 <p>by using standard operations with the derivative operator ‘s’.</p>
 <p>If we wanted to add more information to the transfer function, e.g.&nbsp;a name, or particular tags for inputs/outputs, we can explicitly provide arrays of numbers representing the powers of ‘s’ in the numerator / denominator, then pass additional keywords for namings.</p>
-<div id="d4f4a99d" class="cell" data-execution_count="3">
+<div id="09af57e2" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>num <span class="op">=</span> [<span class="fl">2.5</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span>
@@ -253,13 +257,13 @@ window.Quarto = {
 <p>named explicitly as <code>Gc</code>, with input <code>Ysp</code> and output <code>Y</code>.</p>
 <hr>
 </section>
-<section id="inputoutput-responses" class="level2">
-<h2 class="anchored" data-anchor-id="inputoutput-responses">Input/Output Responses</h2>
+<section id="inputoutput-responses" class="level3">
+<h3 class="anchored" data-anchor-id="inputoutput-responses">Input/Output Responses</h3>
 <p>Once we’ve constructed transfer functions from some underlying dynamical system, we’re typically interested in how the system responds to perturbations such as impulses or step changes. Again, <code>control</code> provides a toolkit for this, namely in the <code>step_response</code> function.</p>
 <p>Visualizing the step response of</p>
 <p><span class="math display">\[G_{p}(s) = \frac{1}{(s+2)(s+1)}\]</span></p>
 <p>which we expect to be stable (with no oscillations) due to the negative real poles:</p>
-<div id="89b26a68" class="cell" data-execution_count="4">
+<div id="b50e5edd" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
@@ -278,15 +282,15 @@ window.Quarto = {
 </div>
 <hr>
 </section>
-<section id="frequency-analysis---bode-plots" class="level2">
-<h2 class="anchored" data-anchor-id="frequency-analysis---bode-plots">Frequency Analysis - Bode Plots</h2>
+<section id="frequency-analysis---bode-plots" class="level3">
+<h3 class="anchored" data-anchor-id="frequency-analysis---bode-plots">Frequency Analysis - Bode Plots</h3>
 <p>Recall the utility of Bode plots. They are a graphical tool used to visualize how a given transfer function responds to an oscillatory input, of the form,</p>
 <p><span class="math display">\[u(t) = A\sin{\omega t + \phi}\]</span></p>
 <p>for a specified amplitude <span class="math inline">\(A\)</span>, frequency of oscillation <span class="math inline">\(\omega\)</span>, and phase shift <span class="math inline">\(\phi\)</span>. The Bode plot shows the magnitude (amplitude ratio) of oscillations that will be observed in the output, as well as the response’s phase shift.</p>
 <p>These plots quickly show us how “well” the dynamics of our system can keep up with</p>
 <p>Consider a transfer function <span class="math display">\[G(s) = \frac{1}{(\tau_{1}s + 1)(\tau_{2}s + 1)}\]</span></p>
 <p>with two poles (<span class="math inline">\(p_{1}, p_{2}\)</span>) at <span class="math inline">\(s = -\frac{1}{\tau_{1}}, -\frac{1}{\tau_{2}}\)</span> for <span class="math inline">\(\tau_{1}, \tau_{2} = 1, \ 10\)</span>.</p>
-<div id="06d4df4b" class="cell" data-execution_count="5">
+<div id="e9b7d4ed" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>t1, t2 <span class="op">=</span> <span class="dv">1</span>, <span class="dv">10</span></span>
@@ -304,12 +308,12 @@ window.Quarto = {
 </div>
 <hr>
 </section>
-<section id="root-locus-diagrams" class="level2">
-<h2 class="anchored" data-anchor-id="root-locus-diagrams">Root Locus Diagrams</h2>
+<section id="root-locus-diagrams" class="level3">
+<h3 class="anchored" data-anchor-id="root-locus-diagrams">Root Locus Diagrams</h3>
 <p>Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies – usually the controller gain <span class="math inline">\(K_c\)</span>. Here, we’ll look at a few familiar systems from homework. Consider the following open-loop transfer functions, for two systems under PI-control:</p>
 <p><span class="math display">\[L_{1}(s) = \frac{\frac{K_{c}}{1.5}(1.5s+1)}{s(2s+1)(s+1)}\]</span></p>
 <p><span class="math display">\[L_{2}(s) = \frac{\frac{K_{c}}{0.5}(0.5s+1)}{s(2s+1)(s+1)}\]</span></p>
-<div id="e344f224" class="cell" data-execution_count="6">
+<div id="762fa778" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
@@ -337,7 +341,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="9ea3dcd3" class="cell" data-execution_count="7">
+<div id="c5c72cc6" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
@@ -362,11 +366,12 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
 
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
