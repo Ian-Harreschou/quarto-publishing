@@ -1,13 +1,11 @@
 ---
-title: "Welcome!"
+title: "Welcome to my Quarto site"
 format: html
 ---
 
-# Welcome to my Quarto site
-
 This is a hub for personal notes and tutorials in process simulation and control, (...). They closely follow courses taken at the University of Minnesota - Twin Cities. 
 
-Use the navigation bar to explore other pages.
+Use the navigation bar to explore other topics.
 
 #### Disclaimer 
 
