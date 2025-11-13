@@ -20,9 +20,7 @@ jupyter: py_controls
 
 ---
 
-## Bode and Root Locus Diagrams of LTI Systems
-
-This demonstration takes advantage of the `python-control` package, which implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials [here](https://python-control.readthedocs.io/en/0.10.2/index.html).
+This demonstration takes advantage of the `python-control` package to illustrate tools available for computational / numerical process modeling and control. This package implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials [here](https://python-control.readthedocs.io/en/0.10.2/index.html).
 
 ---
 
@@ -72,20 +70,41 @@ named explicitly as `Gc`, with input `Ysp` and output `Y`.
 
 ### Input/Output Responses
 
-Once we've constructed transfer functions from some underlying dynamical system, we're typically interested in how the system responds to perturbations such as impulses or step changes. Again, `control` provides a toolkit for this, namely in the `step_response` function.
+Once we've constructed transfer functions from some underlying dynamical system, we're typically interested in how the system responds to perturbations such as impulses or step changes. 
 
-Visualizing the step response of 
+If the system is stable, the time-domain response will settle. This could be to its original steady-state, in the case we have an impulse input, a new steady-state if we provide a step-change, or it may never settle if we provide a ramp input. 
 
-$$G_{p}(s) = \frac{1}{(s+2)(s+1)}$$
+Again, `control` provides tools for this analysis, with the `step_response`, `impulse_response`, and `forced_response` functions.
 
-which we expect to be stable (with no oscillations) due to the negative real poles:
+#### Impulse Response
+
+```{python}
+Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
+
+resp = ctrl.impulse_response(Gp)
+
+resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = \\delta(t)$'])
+```
+
+#### Step Response 
 
 ```{python}
 Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
 
 resp = ctrl.step_response(Gp)
 
-resp.plot(plot_inputs=True)
+resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = 1$'])
+```
+
+#### Forced Response
+
+```{python}
+Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
+t = np.linspace(0, 7, num=300)
+
+resp = ctrl.forced_response(Gp, t, t)
+
+resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = t$'])
 ```
 
 ---
