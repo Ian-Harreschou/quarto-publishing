@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Process Simulation &amp; Control – Hello!</title>
+<title>Process Simulation &amp; Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,9 +148,6 @@ window.Quarto = {
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Hello!</span>
-    </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -163,8 +160,8 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./computations.html"> 
-<span class="menu-text">Topic 1</span></a>
+    <a class="nav-link active" href="./controls.html" aria-current="page"> 
+<span class="menu-text">Process Control &amp; Simulation</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -223,7 +220,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="bode-and-root-locus-diagrams-of-lti-systems">Bode and Root Locus Diagrams of LTI Systems</h2>
 <p>This demonstration takes advantage of the <code>python-control</code> package, which implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials <a href="https://python-control.readthedocs.io/en/0.10.2/index.html">here</a>.</p>
 <hr>
-<div id="c647327b" class="cell" data-execution_count="1">
+<div id="966cea83" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preamble to import packages (renamed using 'import &lt;package&gt; as &lt;name&gt;')</span></span>
@@ -237,7 +234,7 @@ window.Quarto = {
 <p>Before we look at the behavior of transfer functions, we need to know how to construct them.</p>
 <p>In the <code>control</code> package we can do this a number of ways–such as via state-space representation–but one of the most intuitive or beginner-friendly methods is by defining our symbolic <span class="math inline">\(s\)</span>, then using standard algebraic operations to build the polynomials of the transfer function <span class="math inline">\(G(s)\)</span>.</p>
 <p><code>control</code> includes a “factory function” <code>tf()</code> to construct objects of the <code>TransferFunction</code> class for this purpose.</p>
-<div id="d0be83c6" class="cell" data-execution_count="2">
+<div id="f98bb9ba" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> ctrl.tf(<span class="st">'s'</span>) <span class="co"># define 's' as a TransferFunction class</span></span>
@@ -249,7 +246,7 @@ window.Quarto = {
 <p><span class="math display">\[G(s) = \frac{1}{2s + 1}\]</span></p>
 <p>by using standard operations with the derivative operator ‘s’.</p>
 <p>If we wanted to add more information to the transfer function, e.g.&nbsp;a name, or particular tags for inputs/outputs, we can explicitly provide arrays of numbers representing the powers of ‘s’ in the numerator / denominator, then pass additional keywords for namings.</p>
-<div id="0d216206" class="cell" data-execution_count="3">
+<div id="f1fd6382" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>num <span class="op">=</span> [<span class="fl">2.5</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span>
@@ -275,7 +272,7 @@ $$\dfrac{2.5 s^2 + 6 s + 7}{s^3 + 1.5 s^2 + 4 s + 6}$$
 <p>Visualizing the step response of</p>
 <p><span class="math display">\[G_{p}(s) = \frac{1}{(s+2)(s+1)}\]</span></p>
 <p>which we expect to be stable (with no oscillations) due to the negative real poles:</p>
-<div id="88925d44" class="cell" data-execution_count="4">
+<div id="7f93ed8e" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
@@ -298,7 +295,7 @@ $$\dfrac{2.5 s^2 + 6 s + 7}{s^3 + 1.5 s^2 + 4 s + 6}$$
 <p>Recall the utility of Bode plots. They are a graphical tool used to visualize how a given transfer function responds to an oscillatory input, of the form,</p>
 <p><span class="math display">\[u(t) = A\sin{\omega t + \phi}\]</span></p>
 <p>for a specified amplitude <span class="math inline">\(A\)</span>, frequency of oscillation <span class="math inline">\(\omega\)</span>, and phase shift <span class="math inline">\(\phi\)</span>.</p>
-<div id="0f3161ef" class="cell" data-execution_count="5">
+<div id="a12ed4e7" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>intgr <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>s</span>
@@ -323,7 +320,7 @@ $$\dfrac{2.5 s^2 + 6 s + 7}{s^3 + 1.5 s^2 + 4 s + 6}$$
 <p>Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies – usually the controller gain <span class="math inline">\(K_c\)</span>. Here, we’ll look at a few familiar systems from homework. Consider the following open-loop transfer functions, for two systems under PI-control:</p>
 <p><span class="math display">\[L_{1}(s) = \frac{\frac{K_{c}}{1.5}(1.5s+1)}{s(2s+1)(s+1)}\]</span></p>
 <p><span class="math display">\[L_{2}(s) = \frac{\frac{K_{c}}{0.5}(0.5s+1)}{s(2s+1)(s+1)}\]</span></p>
-<div id="547e7f0d" class="cell" data-execution_count="6">
+<div id="682e3a34" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
@@ -351,7 +348,7 @@ $$\dfrac{2.5 s^2 + 6 s + 7}{s^3 + 1.5 s^2 + 4 s + 6}$$
 </div>
 </div>
 </div>
-<div id="1f312eba" class="cell" data-execution_count="7">
+<div id="4e62a346" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
