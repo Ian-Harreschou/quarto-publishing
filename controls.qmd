@@ -28,6 +28,64 @@ This demonstration takes advantage of the `python-control` package, which implem
 # preamble to import packages (renamed using 'import <package> as <name>')
 import numpy as np
 import control as ctrl
+import matplotlib.pyplot as plt
+```
+
+### Constructing Transfer Functions
+
+Before we look at the behavior of transfer functions, we need to know how to construct them. 
+
+In the `control` package we can do this a number of ways--such as via state-space representation--but one of the most intuitive or beginner-friendly methods is by defining our symbolic $s$, then using standard algebraic operations to build the polynomials of the transfer function $G(s)$. 
+
+`control` includes a "factory function" `tf()` to construct objects of the `TransferFunction` class for this purpose.
+
+```{python}
+s = ctrl.tf('s') # define 's' as a TransferFunction class
+
+G = 1 / (2*s + 1)
+```
+
+In this code cell, we are constructing 
+
+$$G(s) = \frac{1}{2s + 1}$$
+
+by using standard operations with the derivative operator 's'.
+
+If we wanted to add more information to the transfer function, e.g. a name, or particular tags for inputs/outputs, we can explicitly provide arrays of numbers representing the powers of 's' in the numerator / denominator, then pass additional keywords for namings.
+
+```{python}
+num = [2.5, 6, 7]
+den = [1, 1.5, 4, 6]
+
+G = ctrl.tf(num, den, name = 'Gc', inputs = ['Ysp'], outputs = ['Y'])
+
+G
+```
+
+This cell constructs a transfer function 
+
+$$G(s) = \frac{2.5s^{2}+6s+7}{s^{3}+1.5s^{2}+4s+6}$$
+
+named explicitly as `Gc`, with input `Ysp` and output `Y`.
+
+---
+
+### Input/Output Responses
+
+Once we've constructed transfer functions from some underlying dynamical system, we're typically interested in how the system responds to perturbations such as impulses or step changes. Again, `control` provides a toolkit for this, namely in the `step_response` function.
+
+Visualizing the step response of 
+
+$$G_{p}(s) = \frac{1}{(s+2)(s+1)}$$
+
+which we expect to be stable (with no oscillations) due to the negative real poles:
+
+```{python}
+Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
+
+resp = ctrl.step_response(Gp)
+
+resp.plot(plot_inputs=True)
 ```
 
 ### Frequency Analysis - Bode Plots
@@ -38,9 +96,8 @@ $$u(t) = A\sin{\omega t + \phi}$$
 
 for a specified amplitude $A$, frequency of oscillation $\omega$, and phase shift $\phi$.
 
-```{python}
-s = ctrl.tf('s') # define 's' as a TransferFunction class
 
+```{python}
 intgr = 1/s
 diffr = s
 
@@ -88,3 +145,5 @@ Gol = Gv*Gm*Gp*Gc
 
 ctrl.root_locus_plot(Gol)
 ```
+
+### References
