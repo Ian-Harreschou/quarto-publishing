@@ -2,12 +2,9 @@
 title: Process Simulation & Control
 
 toc: true
+toc-title: Contents
 toc-location: left
 toc-depth: 3
-toc-title: Contents
-
-# number-sections: true
-# number-depth: 2
 
 execute:
     enabled: true
