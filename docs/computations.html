@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Process Simulation &amp; Control – Hello!</title>
+<title>Test Publishing to GitHub Pages with Quarto – Hello!</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,7 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -103,9 +103,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -139,7 +136,7 @@ window.Quarto = {
 
 </head>
 
-<body class="floating nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -163,7 +160,7 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./computations.html"> 
+    <a class="nav-link active" href="./computations.html" aria-current="page"> 
 <span class="menu-text">Topic 1</span></a>
   </li>  
 </ul>
@@ -176,32 +173,14 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#bode-and-root-locus-diagrams-of-lti-systems" id="toc-bode-and-root-locus-diagrams-of-lti-systems" class="nav-link active" data-scroll-target="#bode-and-root-locus-diagrams-of-lti-systems">Bode and Root Locus Diagrams of LTI Systems</a>
-  <ul class="collapse">
-  <li><a href="#constructing-transfer-functions" id="toc-constructing-transfer-functions" class="nav-link" data-scroll-target="#constructing-transfer-functions">Constructing Transfer Functions</a></li>
-  <li><a href="#inputoutput-responses" id="toc-inputoutput-responses" class="nav-link" data-scroll-target="#inputoutput-responses">Input/Output Responses</a></li>
-  <li><a href="#frequency-analysis---bode-plots" id="toc-frequency-analysis---bode-plots" class="nav-link" data-scroll-target="#frequency-analysis---bode-plots">Frequency Analysis - Bode Plots</a></li>
-  <li><a href="#root-locus-diagrams" id="toc-root-locus-diagrams" class="nav-link" data-scroll-target="#root-locus-diagrams">Root Locus Diagrams</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
-  </ul></li>
-  </ul>
-</nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Process Simulation &amp; Control</h1>
+<h1 class="title">Test Publishing to GitHub Pages with Quarto</h1>
 </div>
 
 
@@ -218,170 +197,39 @@ window.Quarto = {
 </header>
 
 
-<hr>
-<section id="bode-and-root-locus-diagrams-of-lti-systems" class="level2">
-<h2 class="anchored" data-anchor-id="bode-and-root-locus-diagrams-of-lti-systems">Bode and Root Locus Diagrams of LTI Systems</h2>
-<p>This demonstration takes advantage of the <code>python-control</code> package, which implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials <a href="https://python-control.readthedocs.io/en/0.10.2/index.html">here</a>.</p>
-<hr>
-<div id="1138ed60" class="cell" data-execution_count="1">
+<section id="example-simple-matplotlib-plotting" class="level3">
+<h3 class="anchored" data-anchor-id="example-simple-matplotlib-plotting">Example: Simple Matplotlib Plotting</h3>
+<p>Take <span class="math inline">\(x \in [0,30]\)</span> and <span class="math inline">\(y_{1} = 2\sin{x}, y_{2} = 4\sin{x}\)</span></p>
+<div id="1dfe1e97" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preamble to import packages (renamed using 'import &lt;package&gt; as &lt;name&gt;')</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> control <span class="im">as</span> ctrl</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<section id="constructing-transfer-functions" class="level3">
-<h3 class="anchored" data-anchor-id="constructing-transfer-functions">Constructing Transfer Functions</h3>
-<p>Before we look at the behavior of transfer functions, we need to know how to construct them.</p>
-<p>In the <code>control</code> package we can do this a number of ways–such as via state-space representation–but one of the most intuitive or beginner-friendly methods is by defining our symbolic <span class="math inline">\(s\)</span>, then using standard algebraic operations to build the polynomials of the transfer function <span class="math inline">\(G(s)\)</span>.</p>
-<p><code>control</code> includes a “factory function” <code>tf()</code> to construct objects of the <code>TransferFunction</code> class for this purpose.</p>
-<div id="94210ab2" class="cell" data-execution_count="2">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> ctrl.tf(<span class="st">'s'</span>) <span class="co"># define 's' as a TransferFunction class</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>s <span class="op">+</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<p>In this code cell, we are constructing</p>
-<p><span class="math display">\[G(s) = \frac{1}{2s + 1}\]</span></p>
-<p>by using standard operations with the derivative operator ‘s’.</p>
-<p>If we wanted to add more information to the transfer function, e.g.&nbsp;a name, or particular tags for inputs/outputs, we can explicitly provide arrays of numbers representing the powers of ‘s’ in the numerator / denominator, then pass additional keywords for namings.</p>
-<div id="565d163a" class="cell" data-execution_count="3">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>num <span class="op">=</span> [<span class="fl">2.5</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>den <span class="op">=</span> [<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">4</span>, <span class="dv">6</span>]</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> ctrl.tf(num, den, name <span class="op">=</span> <span class="st">'Gc'</span>, inputs <span class="op">=</span> [<span class="st">'Ysp'</span>], outputs <span class="op">=</span> [<span class="st">'Y'</span>])</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>G</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="3">
-&lt;TransferFunction Gc: ['Ysp'] -&gt; ['Y']&gt;
-$$\dfrac{2.5 s^2 + 6 s + 7}{s^3 + 1.5 s^2 + 4 s + 6}$$
-</div>
-</div>
-<p>This cell constructs a transfer function</p>
-<p><span class="math display">\[G(s) = \frac{2.5s^{2}+6s+7}{s^{3}+1.5s^{2}+4s+6}\]</span></p>
-<p>named explicitly as <code>Gc</code>, with input <code>Ysp</code> and output <code>Y</code>.</p>
-<hr>
-</section>
-<section id="inputoutput-responses" class="level3">
-<h3 class="anchored" data-anchor-id="inputoutput-responses">Input/Output Responses</h3>
-<p>Once we’ve constructed transfer functions from some underlying dynamical system, we’re typically interested in how the system responds to perturbations such as impulses or step changes. Again, <code>control</code> provides a toolkit for this, namely in the <code>step_response</code> function.</p>
-<p>Visualizing the step response of</p>
-<p><span class="math display">\[G_{p}(s) = \frac{1}{(s+2)(s+1)}\]</span></p>
-<p>which we expect to be stable (with no oscillations) due to the negative real poles:</p>
-<div id="f2d2cf58" class="cell" data-execution_count="4">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.step_response(Gp)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">30</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.sin(x)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>y2 <span class="op">=</span> <span class="dv">4</span> <span class="op">*</span> np.sin(x)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="vs">r'</span><span class="dv">$</span><span class="vs">y</span><span class="dv">$</span><span class="vs">'</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="vs">r'</span><span class="dv">$</span><span class="vs">x</span><span class="dv">$</span><span class="vs">'</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>plt.plot(x,y1, label <span class="op">=</span> <span class="vs">r"</span><span class="dv">$</span><span class="vs">y_</span><span class="op">{1}</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>plt.plot(x,y2, label <span class="op">=</span> <span class="vs">r"</span><span class="dv">$</span><span class="vs">y_</span><span class="op">{2}</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="controls_files/figure-html/cell-5-output-1.png" width="664" height="478" class="figure-img"></p>
+<p><img src="computations_files/figure-html/cell-2-output-1.png" width="589" height="429" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-</section>
-<section id="frequency-analysis---bode-plots" class="level3">
-<h3 class="anchored" data-anchor-id="frequency-analysis---bode-plots">Frequency Analysis - Bode Plots</h3>
-<p>Recall the utility of Bode plots. They are a graphical tool used to visualize how a given transfer function responds to an oscillatory input, of the form,</p>
-<p><span class="math display">\[u(t) = A\sin{\omega t + \phi}\]</span></p>
-<p>for a specified amplitude <span class="math inline">\(A\)</span>, frequency of oscillation <span class="math inline">\(\omega\)</span>, and phase shift <span class="math inline">\(\phi\)</span>.</p>
-<div id="37c48853" class="cell" data-execution_count="5">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>intgr <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>s</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>diffr <span class="op">=</span> s</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ctrl.bode_plot(intgr)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>ctrl.bode_plot(diffr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="controls_files/figure-html/cell-6-output-1.png" width="664" height="455" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<hr>
-</section>
-<section id="root-locus-diagrams" class="level3">
-<h3 class="anchored" data-anchor-id="root-locus-diagrams">Root Locus Diagrams</h3>
-<p>Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies – usually the controller gain <span class="math inline">\(K_c\)</span>. Here, we’ll look at a few familiar systems from homework. Consider the following open-loop transfer functions, for two systems under PI-control:</p>
-<p><span class="math display">\[L_{1}(s) = \frac{\frac{K_{c}}{1.5}(1.5s+1)}{s(2s+1)(s+1)}\]</span></p>
-<p><span class="math display">\[L_{2}(s) = \frac{\frac{K_{c}}{0.5}(0.5s+1)}{s(2s+1)(s+1)}\]</span></p>
-<div id="dd7f41ee" class="cell" data-execution_count="6">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>tau_I <span class="op">=</span> <span class="fl">1.5</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>Gv <span class="op">=</span> <span class="dv">1</span> <span class="co"># tf of a gate valve (unity loop)</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>Gm <span class="op">=</span> <span class="dv">1</span> <span class="co"># tf of a measurement device (unity loop)</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((<span class="dv">2</span><span class="op">*</span>s<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># tf of the process</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>Gc <span class="op">=</span> Kc <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span> <span class="op">/</span> (tau_I<span class="op">*</span>s)) <span class="co"># tf of the controller</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>Gol <span class="op">=</span> Gv<span class="op">*</span>Gm<span class="op">*</span>Gp<span class="op">*</span>Gc</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>ctrl.root_locus_plot(Gol)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Ignoring fixed x limits to fulfill fixed data aspect with adjustable data limits.</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="controls_files/figure-html/cell-7-output-2.png" width="849" height="849" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<div id="e70982ae" class="cell" data-execution_count="7">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>tau_I <span class="op">=</span> <span class="fl">1.5</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>Gc <span class="op">=</span> Kc <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span> <span class="op">/</span> (tau_I<span class="op">*</span>s)) <span class="co"># tf of the controller</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>Gol <span class="op">=</span> Gv<span class="op">*</span>Gm<span class="op">*</span>Gp<span class="op">*</span>Gc</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>ctrl.root_locus_plot(Gol)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Ignoring fixed x limits to fulfill fixed data aspect with adjustable data limits.</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="controls_files/figure-html/cell-8-output-2.png" width="849" height="849" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="references" class="level3">
-<h3 class="anchored" data-anchor-id="references">References</h3>
 
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
