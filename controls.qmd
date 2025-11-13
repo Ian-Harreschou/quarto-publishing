@@ -5,8 +5,8 @@ toc: true
 toc-location: left
 toc-title: Contents
 
-number-sections: true
-number-depth: 2
+# number-sections: true
+# number-depth: 2
 
 execute:
     enabled: true
