@@ -12,10 +12,16 @@ website:
     - text: "Home"
       href: index.qmd
     - text: "Process Control & Simulation"
-      href: controls.qmd
+      href: control-basics.qmd
+
+  sidebar:
+    contents:
+      - control-basics.qmd
+      - controls.qmd
       
 format:
   html:
     page-navigation: true
     # - text: "Topic 2"
     #   href: reactors.qmd
+

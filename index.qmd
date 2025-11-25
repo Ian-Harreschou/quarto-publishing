@@ -1,9 +1,11 @@
 ---
 title: "Welcome to my Quarto site"
 format: html
+
+sidebar: false
 ---
 
-This is a hub for personal notes and tutorials in process simulation and control, (...). They closely follow courses taken at the University of Minnesota - Twin Cities. 
+This is a hub for course notes and tutorials in process simulation and control. They closely follow courses taken at the University of Minnesota - Twin Cities. 
 
 Use the navigation bar to explore other topics.
 

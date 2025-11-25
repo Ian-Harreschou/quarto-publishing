@@ -1,5 +1,5 @@
 ---
-title: Process Simulation & Control
+title: Graphical Techniques
 
 toc: true
 toc-title: Contents
@@ -291,97 +291,7 @@ display(Markdown(table_md))
 
 Since we've pushed the gains of the system and controller too far, now our gain margin is a factor less than 1, and our phase margin is negative.
 
-## Core Functionalities of Python-Control
 
-### Constructing Transfer Functions
-
-Before we look at the behavior of transfer functions, we need to know how to construct them. 
-
-In the `control` package we can do this a number of ways--such as via state-space representation--but one of the most intuitive or beginner-friendly methods is by defining our symbolic $s$, then using standard algebraic operations to build the polynomials of the transfer function $G(s)$. This is done already in one of the code cells for the Bode / root locus plots, but is shown again in the following cell.
-
-`control` includes a "factory function" `tf()` to construct objects of the `TransferFunction` class for this purpose.
-
-```{python}
-s = ctrl.tf('s') # define 's' as a TransferFunction class
-
-G = 1 / (2*s + 1)
-```
-
-In this code cell, we are constructing 
-
-$$G(s) = \frac{1}{2s + 1}$$
-
-by using standard operations with the derivative operator 's'.
-
-If we wanted to add more information to the transfer function, e.g. a name, or particular tags for inputs/outputs, we can explicitly provide arrays of numbers representing the powers of 's' in the numerator / denominator, then pass additional keywords for namings.
-
-```{python}
-num = [2.5, 6, 7]
-den = [1, 1.5, 4, 6]
-
-G = ctrl.tf(num, den, name = 'Gc', inputs = ['Ysp'], outputs = ['Y'])
-```
-
-This cell constructs a transfer function 
-
-$$G(s) = \frac{2.5s^{2}+6s+7}{s^{3}+1.5s^{2}+4s+6}$$
-
-named explicitly as `Gc`, with input `Ysp` and output `Y`.
-
----
-
-### Input/Output Responses
-
-Once we've constructed transfer functions from some underlying dynamical system, we're typically interested in how the system responds to perturbations such as impulses or step changes. 
-
-If the system is stable, the time-domain response will settle. This could be to its original steady-state, in the case we have an impulse input, a new steady-state if we provide a step-change, or it may never settle if we provide a ramp input. 
-
-Again, `control` provides tools for this analysis, with the `step_response`, `impulse_response`, and `forced_response` functions.
-
-#### Impulse Response
-
-Consider an impulse signal at $t_{0}=0$ of size 1, such that our input $u(t)=\delta(t)$:
-
-```{python}
-Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
-
-resp = ctrl.impulse_response(Gp)
-
-resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = \\delta(t)$'])
-```
-
-**Note: Plotting a delta function doesn't make a ton of sense by its definition, so $u(t)$ plotted in red here is not accurate. We'd need to make a special graphic or function to plot it true-to-form...**
-
-#### Step Response 
-
-How will the system respond to a constant step input of the form $u(t) = M$, with $M = 1$:
-
-```{python}
-Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
-
-resp = ctrl.step_response(Gp)
-
-resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = 1$'])
-```
-
-Notice, with this form of transfer function, our system never reaches the value of the step input, giving us a **non-zero steady-state offset**(generally undesirable) and persistent error.
-
-#### Forced Response
-
-We can also simulate how the process will respond to an arbitrary input, i.e. a ramp forcing function $u(t) = t$:
-
-```{python}
-Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
-t = np.linspace(0, 7, num=300)
-
-resp = ctrl.forced_response(Gp, t, t)
-
-resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = t$'])
-```
-
-In this case, our process is always trying to keep up with the ramp function, but ultimately won't close the gap. This also yields a non-zero steady-state offset and persistent error, however we might see the system reach a steady-state **difference** in signals over a long enough time period. Fun, right?
-
----
 
 ## References
 
