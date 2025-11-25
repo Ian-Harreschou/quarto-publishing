@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Test Publishing to GitHub Pages with Quarto (Page 2)</title>
+<title>Core Functionalities</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,6 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./control-plotting.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -136,7 +137,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating nav-fixed fullcontent quarto-light">
+<body class="nav-sidebar floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -171,7 +172,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Test Publishing to GitHub Pages with Quarto (Page 2)</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./control-basics.html">Core Functionalities</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -189,7 +190,7 @@ window.Quarto = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./control-basics.html" class="sidebar-item-text sidebar-link">
+  <a href="./control-basics.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Core Functionalities</span></a>
   </div>
 </li>
@@ -201,16 +202,29 @@ window.Quarto = {
 </li>
     </ul>
     </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#core-functionalities-of-python-control" id="toc-core-functionalities-of-python-control" class="nav-link active" data-scroll-target="#core-functionalities-of-python-control">Core Functionalities of Python-Control</a>
+  <ul class="collapse">
+  <li><a href="#constructing-transfer-functions" id="toc-constructing-transfer-functions" class="nav-link" data-scroll-target="#constructing-transfer-functions">Constructing Transfer Functions</a></li>
+  <li><a href="#inputoutput-responses" id="toc-inputoutput-responses" class="nav-link" data-scroll-target="#inputoutput-responses">Input/Output Responses</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Test Publishing to GitHub Pages with Quarto (Page 2)</h1>
+<h1 class="title">Core Functionalities</h1>
 </div>
 
 
@@ -227,19 +241,136 @@ window.Quarto = {
 </header>
 
 
-<div id="e81dedeb" class="cell" data-execution_count="1">
+<hr>
+<p>This demonstration takes advantage of the <code>python-control</code> package to illustrate tools available for computational / numerical process modeling and control. This package implements basic operations for modeling linear, time-invariant (as well as nonlinear, discrete, and stochastic) control systems. Find the documentation for an installation guide and tutorials <a href="https://python-control.readthedocs.io/en/0.10.2/index.html">here</a>.<span class="math inline">\(^{[1]}\)</span></p>
+<div id="e64024c5" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preamble to import packages (renamed using 'import &lt;package&gt; as &lt;name&gt;')</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> control <span class="im">as</span> ctrl</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown, display <span class="co"># to make HTML/Markdown play nicer</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>2</code></pre>
+</div>
+<section id="core-functionalities-of-python-control" class="level2">
+<h2 class="anchored" data-anchor-id="core-functionalities-of-python-control">Core Functionalities of Python-Control</h2>
+<p>In order to do these simulations, the first step is learning how to actually construct transfer functions using the various machinery offered via the package.</p>
+<section id="constructing-transfer-functions" class="level3">
+<h3 class="anchored" data-anchor-id="constructing-transfer-functions">Constructing Transfer Functions</h3>
+<p>Before we look at the behavior of transfer functions, we need to know how to construct them.</p>
+<p>In the <code>control</code> package we can do this a number of ways–such as via state-space representation–but one of the most intuitive or beginner-friendly methods is by defining our symbolic <span class="math inline">\(s\)</span>, then using standard algebraic operations to build the polynomials of the transfer function <span class="math inline">\(G(s)\)</span>. This is done already in one of the code cells for the Bode / root locus plots, but is shown again in the following cell.</p>
+<p><code>control</code> includes a “factory function” <code>tf()</code> to construct objects of the <code>TransferFunction</code> class for this purpose.</p>
+<div id="89dd2ca7" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> ctrl.tf(<span class="st">'s'</span>) <span class="co"># define 's' as a TransferFunction class</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>s <span class="op">+</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>In this code cell, we are constructing</p>
+<p><span class="math display">\[G(s) = \frac{1}{2s + 1}\]</span></p>
+<p>by using standard operations with the derivative operator ‘s’.</p>
+<p>If we wanted to add more information to the transfer function, e.g.&nbsp;a name, or particular tags for inputs/outputs, we can explicitly provide arrays of numbers representing the powers of ‘s’ in the numerator / denominator, then pass additional keywords for namings.</p>
+<div id="5908028f" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>num <span class="op">=</span> [<span class="fl">2.5</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>den <span class="op">=</span> [<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">4</span>, <span class="dv">6</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> ctrl.tf(num, den, name <span class="op">=</span> <span class="st">'Gc'</span>, inputs <span class="op">=</span> [<span class="st">'Ysp'</span>], outputs <span class="op">=</span> [<span class="st">'Y'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>This cell constructs a transfer function</p>
+<p><span class="math display">\[G(s) = \frac{2.5s^{2}+6s+7}{s^{3}+1.5s^{2}+4s+6}\]</span></p>
+<p>named explicitly as <code>Gc</code>, with input <code>Ysp</code> and output <code>Y</code>.</p>
+<hr>
+</section>
+<section id="inputoutput-responses" class="level3">
+<h3 class="anchored" data-anchor-id="inputoutput-responses">Input/Output Responses</h3>
+<p>Once we’ve constructed transfer functions from some underlying dynamical system, we’re typically interested in how the system responds to perturbations such as impulses or step changes.</p>
+<p>If the system is stable, the time-domain response will settle. This could be to its original steady-state, in the case we have an impulse input, a new steady-state if we provide a step-change, or it may never settle if we provide a ramp input.</p>
+<p>Again, <code>control</code> provides tools for this analysis, with the <code>step_response</code>, <code>impulse_response</code>, and <code>forced_response</code> functions.</p>
+<section id="impulse-response" class="level4">
+<h4 class="anchored" data-anchor-id="impulse-response">Impulse Response</h4>
+<p>Consider an impulse signal at <span class="math inline">\(t_{0}=0\)</span> of size 1, such that our input <span class="math inline">\(u(t)=\delta(t)\)</span>:</p>
+<div id="6448ca3b" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.impulse_response(Gp)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$y(t)$'</span>, <span class="ss">f'$u(t) = </span><span class="ch">\\</span><span class="ss">delta(t)$'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="control-basics_files/figure-html/cell-5-output-1.png" width="664" height="478" class="figure-img"></p>
+</figure>
 </div>
 </div>
+</div>
+<p><strong>Note: Plotting a delta function doesn’t make a ton of sense by its definition, so <span class="math inline">\(u(t)\)</span> plotted in red here is not accurate. We’d need to make a special graphic or function to plot it true-to-form…</strong></p>
+</section>
+<section id="step-response" class="level4">
+<h4 class="anchored" data-anchor-id="step-response">Step Response</h4>
+<p>How will the system respond to a constant step input of the form <span class="math inline">\(u(t) = M\)</span>, with <span class="math inline">\(M = 1\)</span>:</p>
+<div id="de0e41c5" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.step_response(Gp)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$y(t)$'</span>, <span class="ss">f'$u(t) = 1$'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="control-basics_files/figure-html/cell-6-output-1.png" width="664" height="478" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Notice, with this form of transfer function, our system never reaches the value of the step input, giving us a <strong>non-zero steady-state offset</strong>(generally undesirable) and persistent error.</p>
+</section>
+<section id="forced-response" class="level4">
+<h4 class="anchored" data-anchor-id="forced-response">Forced Response</h4>
+<p>We can also simulate how the process will respond to an arbitrary input, i.e.&nbsp;a ramp forcing function <span class="math inline">\(u(t) = t\)</span>:</p>
+<div id="396f7d67" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">7</span>, num<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.forced_response(Gp, t, t)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$y(t)$'</span>, <span class="ss">f'$u(t) = t$'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="control-basics_files/figure-html/cell-7-output-1.png" width="664" height="478" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this case, our process is always trying to keep up with the ramp function, but ultimately won’t close the gap. This also yields a non-zero steady-state offset and persistent error, however we might see the system reach a steady-state <strong>difference</strong> in signals over a long enough time period. Fun, right?</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>[1] S. Fuller, B. Greiner, J. Moore, R. Murray, R. van Paassen and R. Yorke, “The Python Control Systems Library (python-control),” 2021 60th IEEE Conference on Decision and Control (CDC), 2021, pp.&nbsp;4875-4881</p>
+<p>[2] Kravaris, C., &amp; Kookos, I. K. (2021). <em>Understanding Process Dynamics and Control</em>. Cambridge University Press.</p>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -642,6 +773,15 @@ window.Quarto = {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./control-plotting.html" class="pagination-link" aria-label="Plotting Functionalities">
+        <span class="nav-page-text">Plotting Functionalities</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
