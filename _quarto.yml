@@ -4,6 +4,7 @@ project:
 
 execute:
   cache: false
+  enabled: true
 
 website:
   navbar:
@@ -12,5 +13,9 @@ website:
       href: index.qmd
     - text: "Process Control & Simulation"
       href: controls.qmd
+      
+format:
+  html:
+    page-navigation: true
     # - text: "Topic 2"
     #   href: reactors.qmd

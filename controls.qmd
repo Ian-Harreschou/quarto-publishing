@@ -20,7 +20,7 @@ jupyter: py_controls
 
 ---
 
-This demonstration takes advantage of the `python-control` package to illustrate tools available for computational / numerical process modeling and control. This package implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials [here](https://python-control.readthedocs.io/en/0.10.2/index.html).
+This demonstration takes advantage of the `python-control` package to illustrate tools available for computational / numerical process modeling and control. This package implements basic operations for modeling linear, time-invariant (as well as nonlinear, discrete, and stochastic) control systems. Find the documentation for an installation guide and tutorials [here](https://python-control.readthedocs.io/en/0.10.2/index.html).$^{[1]}$
 
 ---
 
@@ -29,85 +29,13 @@ This demonstration takes advantage of the `python-control` package to illustrate
 import numpy as np
 import control as ctrl
 import matplotlib.pyplot as plt
+
+from IPython.display import Markdown, display # to make HTML/Markdown play nicer
 ```
 
-### Constructing Transfer Functions
+## Common Graphical Techniques
 
-Before we look at the behavior of transfer functions, we need to know how to construct them. 
-
-In the `control` package we can do this a number of ways--such as via state-space representation--but one of the most intuitive or beginner-friendly methods is by defining our symbolic $s$, then using standard algebraic operations to build the polynomials of the transfer function $G(s)$. 
-
-`control` includes a "factory function" `tf()` to construct objects of the `TransferFunction` class for this purpose.
-
-```{python}
-s = ctrl.tf('s') # define 's' as a TransferFunction class
-
-G = 1 / (2*s + 1)
-```
-
-In this code cell, we are constructing 
-
-$$G(s) = \frac{1}{2s + 1}$$
-
-by using standard operations with the derivative operator 's'.
-
-If we wanted to add more information to the transfer function, e.g. a name, or particular tags for inputs/outputs, we can explicitly provide arrays of numbers representing the powers of 's' in the numerator / denominator, then pass additional keywords for namings.
-
-```{python}
-num = [2.5, 6, 7]
-den = [1, 1.5, 4, 6]
-
-G = ctrl.tf(num, den, name = 'Gc', inputs = ['Ysp'], outputs = ['Y'])
-```
-
-This cell constructs a transfer function 
-
-$$G(s) = \frac{2.5s^{2}+6s+7}{s^{3}+1.5s^{2}+4s+6}$$
-
-named explicitly as `Gc`, with input `Ysp` and output `Y`.
-
----
-
-### Input/Output Responses
-
-Once we've constructed transfer functions from some underlying dynamical system, we're typically interested in how the system responds to perturbations such as impulses or step changes. 
-
-If the system is stable, the time-domain response will settle. This could be to its original steady-state, in the case we have an impulse input, a new steady-state if we provide a step-change, or it may never settle if we provide a ramp input. 
-
-Again, `control` provides tools for this analysis, with the `step_response`, `impulse_response`, and `forced_response` functions.
-
-#### Impulse Response
-
-```{python}
-Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
-
-resp = ctrl.impulse_response(Gp)
-
-resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = \\delta(t)$'])
-```
-
-#### Step Response 
-
-```{python}
-Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
-
-resp = ctrl.step_response(Gp)
-
-resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = 1$'])
-```
-
-#### Forced Response
-
-```{python}
-Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
-t = np.linspace(0, 7, num=300)
-
-resp = ctrl.forced_response(Gp, t, t)
-
-resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = t$'])
-```
-
----
+We'll jump right in with some high-level plotting functionalities that `control` provides, namely in generating Bode plots and root locus diagrams.
 
 ### Frequency Analysis - Bode Plots
 
@@ -122,9 +50,11 @@ These plots quickly show us how "well" the dynamics of our system can keep up wi
 Consider a transfer function
 $$G(s) = \frac{1}{(\tau_{1}s + 1)(\tau_{2}s + 1)}$$
 
-with two poles ($p_{1}, p_{2}$) at $s = -\frac{1}{\tau_{1}}, -\frac{1}{\tau_{2}}$ for $\tau_{1}, \tau_{2} = 1, \ 10$.
+with two poles $p_{1}, p_{2}$ at $s = -\frac{1}{\tau_{1}}, -\frac{1}{\tau_{2}}$ for $\tau_{1}, \tau_{2} = 1, \ 10$.
 
 ```{python}
+s = ctrl.tf('s') # define 's' as a TransferFunction class
+
 t1, t2 = 1, 10
 G1 = 1 / ((t1*s + 1)*(t2*s + 1))
 
@@ -170,4 +100,291 @@ Gol = Gv*Gm*Gp*Gc
 ctrl.root_locus_plot(Gol)
 ```
 
-### References
+### Phase and Gain Margins
+
+Phase and gain margins are quantitative measures of relative stability of closed-loop systems, or their 'robustness' to model uncertainty and process variation.$^{[2]}$ 
+
+These quantities essentially tell us how far away from *marginal stability* the system is, so that we can integrate some semblance of safety into operations.
+
+Quickly, we will review a few definitions, and then introduce the newer ones.
+
+**(Open) Loop transfer function $L(s)$** -- the product of the controller transfer function $G_c(s)$ with an overall process transfer function $G(s)$ (which includes the physical process, any sensors/measurement devices, and control elements such as valves).
+
+$$L(s) = G_c(s)G_v(s)G_p(s)G_m(s) = G_c(s)G(s)$$
+
+**Marginal stability** -- the point at which we observe sustained (non-decaying) oscillations in our output, when the input to the system is a sinusoidal function.
+$$1 + L(s=i \omega_u) = 0$$ 
+
+Or,
+
+$$L(s = i \omega_u) = -1$$ 
+
+for an "ultimate" value of $K_c = K_{cu}, \omega = \omega_{u}$, above which we become unstable, as the poles will begin moving into the right half of the *Re-Im* plane.
+
+**Phase crossover (or *critical*) frequency $\omega_p$** -- the frequency at which the phase of the loop transfer function becomes equal to $-180 ^{\circ}$. 
+
+$$ \omega_p : \angle {L(i \omega_p)} = -180 ^{\circ}$$
+
+**Gain crossover frequency $\omega_g$** -- the frequency at which the magnitude of $L(s)$ becomes equal to one, 
+
+$$ \omega_g : |L(i\omega_g)|=1$$
+
+With these, we can introduce the phase and gain margins. 
+
+**Phase margin** *PM* -- the phase shift of the loop transfer function at $\omega_g$ necessary to cause the system to reach *marginal stability*. 
+
+Another interpretation is the *distance* on the phase diagram between the current phase shift and $-180^{\circ}$.
+
+$$PM = \arg \big \{ L(i \omega_g) \big \} - (-180^{\circ})$$
+
+**Gain margin** *GM* -- the factor by which we can scale/multiply the controller gain before the onset of instability
+
+$$GM = \frac{1}{|L(i \omega_p)|}$$
+
+:::{.callout-note}
+Remember that increasing $K_c$ shifts the amplitude ratio of our transfer function upward on a Bode diagram, while leaving the phase shift unchanged. The opposite is true for a system with time delay; the phase shift will necessarily change, but the magnitude will be left unmodified!
+:::
+
+A [high gain margin]{.mark} corresponds to a system that is [far away from instability]{.mark}, but there is a tradeoff, as our controller responds sluggishly.
+
+A [large phase margin]{.mark} is also a sign that [the system is far from instability]{.mark} -- there is a safety margin for how much time delay the system can handle before seeing sustained (or worse, growing) oscillations in the output.
+
+---
+
+#### Example[^1]
+As an illustration of these quantities, take the following PI- controller, aiming to control some 3rd order process:
+
+[^1]: See Kravaris & Kookos, Ch. 17.2, Example 17.4, "*PM and GM of a third-order system under PI control*".
+
+$$G(s) = \frac{K}{(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)}$$
+
+for $\tau_1, \tau_2, \tau_3 = 1, 1/2, 1/3$. 
+
+Our controller has both P- and I-action, which will look like:
+$$G_c(s) = K_c (1 + \frac{1}{\tau_I s})$$
+
+with a chosen value of $\tau_I = 1/3$.
+
+We are told the product of our process and controller gains are non-zero, e.g. $K_c K > 0$, and from a previous example we want to look at the case where $K_c K = 0.5$
+
+```{python}
+
+K = 1 # loop transfer function (process) gain
+Kc = 0.5 # controller gain
+
+t1, t2, t3 = 1, 1/2, 1/3
+tI = 1/3
+
+G = K / ((t1*s + 1)*(t2*s + 1)*(t3*s+1))
+Gc = Kc * (1 + 1/(tI*s))
+
+L = Gc * G
+
+gm, pm, sm, wpc, wgc, wms = ctrl.stability_margins(L)
+
+ctrl.bode_plot(L)
+```
+
+```{python}
+table_md = f"""
+| Parameter | Value |
+|:---------:|:-----:|
+| $\\omega_{{pc}}$ | {wpc:.3f} |
+| $\\omega_{{gc}}$ | {wgc:.3f} |
+| $GM$            | {gm:.3f}  |
+| $PM$            | {pm:.1f}° |
+"""
+
+display(Markdown(table_md))
+```
+
+Do we expect this open-loop transfer function to be step-stable? What might the "output" look like when we simulate a step input? 
+
+How about for the fully-connected, closed-loop response?
+
+:::{.callout-important}
+Recall the poles of our $L(s)$ are purely real, and lie in the left-hand portion of the *Re-Im* plane.
+
+$$ L(s) = (1 + \frac{1}{\tau_I s}) \frac{k_c k}{(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} $$
+
+$$ = (\tau_I s + 1) \frac{k_c k}{(\tau_I s)(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} $$
+:::
+
+If we have a standard unity feedback loop, the closed-loop response to a change in setpoint will be:
+
+$$G_{CL,sp} = \frac{L(s)}{1 + L(s)}$$
+
+and for a step input, we see the following behavior.
+
+```{python}
+t = np.linspace(0,25,num=100)
+
+resp = ctrl.step_response(L / (1 + L), t)
+
+resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$G_CL(t)$', f'$u(t) = M(t)$'])
+```
+
+As we might expect, there's an initial overshoot, oscillatory behavior, and then the system settles to our setpoint with no steady-state error.
+
+Now, let's make use the calculated gain and phase margins to push this system to the brink of instability to confirm the behavior is as we expect!
+
+In this scenario, $(K_c K)_{new} = GM(K_c K)_{old}$
+
+
+```{python}
+t = np.linspace(0,25,num=100)
+
+L = L * gm # scale the original loop transfer function by the previously calculated gain margin
+
+resp = ctrl.step_response(L / (1 + L), t)
+
+resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$G_CL(t)$', f'$u(t) = M(t)$'])
+
+gm, pm, sm, wpc, wgc, wms = ctrl.stability_margins(L)
+```
+
+```{python}
+table_md = f"""
+| Parameter | Value |
+|:---------:|:-----:|
+| $\\omega_{{pc}}$ | {wpc:.3f} |
+| $\\omega_{{gc}}$ | {wgc:.3f} |
+| $GM$            | {gm:.3f}  |
+| $PM$            | {pm:.1f}° |
+"""
+
+display(Markdown(table_md))
+```
+
+Notice in this table, that the phase crossover frequency $w_{pc}$ did not change (indicating the phase shift of the system was unmodified), yet the gain crossover frequency $w_{gc}$ did! Additionally, these two are coincident at $\omega = \sqrt(2)$
+
+Also, we can see that $GM = 1$, $PM = 0^{\circ}$, indicating the gains can't be scaled any further, and the system can't handle any more time delay before becoming unstable.
+
+Finally, just to hit the concepts home, we'll simulate what happens when we increase the gains even further, despite having no wiggle room.
+
+```{python}
+t = np.linspace(0,25,num=100)
+
+L = L * (gm+0.05) # scale the loop transfer function by the gain margin plus some small value
+
+resp = ctrl.step_response(L / (1 + L), t)
+
+resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$G_CL(t)$', f'$u(t) = M(t)$'])
+
+gm, pm, sm, wpc, wgc, wms = ctrl.stability_margins(L)
+
+ctrl.bode_plot(L)
+```
+
+```{python}
+table_md = f"""
+| Parameter | Value |
+|:---------:|:-----:|
+| $\\omega_{{pc}}$ | {wpc:.3f} |
+| $\\omega_{{gc}}$ | {wgc:.3f} |
+| $GM$            | {gm:.3f}  |
+| $PM$            | {pm:.1f}° |
+"""
+
+display(Markdown(table_md))
+```
+
+Since we've pushed the gains of the system and controller too far, now our gain margin is a factor less than 1, and our phase margin is negative.
+
+## Core Functionalities of Python-Control
+
+### Constructing Transfer Functions
+
+Before we look at the behavior of transfer functions, we need to know how to construct them. 
+
+In the `control` package we can do this a number of ways--such as via state-space representation--but one of the most intuitive or beginner-friendly methods is by defining our symbolic $s$, then using standard algebraic operations to build the polynomials of the transfer function $G(s)$. This is done already in one of the code cells for the Bode / root locus plots, but is shown again in the following cell.
+
+`control` includes a "factory function" `tf()` to construct objects of the `TransferFunction` class for this purpose.
+
+```{python}
+s = ctrl.tf('s') # define 's' as a TransferFunction class
+
+G = 1 / (2*s + 1)
+```
+
+In this code cell, we are constructing 
+
+$$G(s) = \frac{1}{2s + 1}$$
+
+by using standard operations with the derivative operator 's'.
+
+If we wanted to add more information to the transfer function, e.g. a name, or particular tags for inputs/outputs, we can explicitly provide arrays of numbers representing the powers of 's' in the numerator / denominator, then pass additional keywords for namings.
+
+```{python}
+num = [2.5, 6, 7]
+den = [1, 1.5, 4, 6]
+
+G = ctrl.tf(num, den, name = 'Gc', inputs = ['Ysp'], outputs = ['Y'])
+```
+
+This cell constructs a transfer function 
+
+$$G(s) = \frac{2.5s^{2}+6s+7}{s^{3}+1.5s^{2}+4s+6}$$
+
+named explicitly as `Gc`, with input `Ysp` and output `Y`.
+
+---
+
+### Input/Output Responses
+
+Once we've constructed transfer functions from some underlying dynamical system, we're typically interested in how the system responds to perturbations such as impulses or step changes. 
+
+If the system is stable, the time-domain response will settle. This could be to its original steady-state, in the case we have an impulse input, a new steady-state if we provide a step-change, or it may never settle if we provide a ramp input. 
+
+Again, `control` provides tools for this analysis, with the `step_response`, `impulse_response`, and `forced_response` functions.
+
+#### Impulse Response
+
+Consider an impulse signal at $t_{0}=0$ of size 1, such that our input $u(t)=\delta(t)$:
+
+```{python}
+Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
+
+resp = ctrl.impulse_response(Gp)
+
+resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = \\delta(t)$'])
+```
+
+**Note: Plotting a delta function doesn't make a ton of sense by its definition, so $u(t)$ plotted in red here is not accurate. We'd need to make a special graphic or function to plot it true-to-form...**
+
+#### Step Response 
+
+How will the system respond to a constant step input of the form $u(t) = M$, with $M = 1$:
+
+```{python}
+Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
+
+resp = ctrl.step_response(Gp)
+
+resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = 1$'])
+```
+
+Notice, with this form of transfer function, our system never reaches the value of the step input, giving us a **non-zero steady-state offset**(generally undesirable) and persistent error.
+
+#### Forced Response
+
+We can also simulate how the process will respond to an arbitrary input, i.e. a ramp forcing function $u(t) = t$:
+
+```{python}
+Gp = 1 / ((s + 2)*(s + 1)) # transfer function for a black-box process, with poles at s = -1, -2
+t = np.linspace(0, 7, num=300)
+
+resp = ctrl.forced_response(Gp, t, t)
+
+resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$', f'$u(t) = t$'])
+```
+
+In this case, our process is always trying to keep up with the ramp function, but ultimately won't close the gap. This also yields a non-zero steady-state offset and persistent error, however we might see the system reach a steady-state **difference** in signals over a long enough time period. Fun, right?
+
+---
+
+## References
+
+[1] S. Fuller, B. Greiner, J. Moore, R. Murray, R. van Paassen and R. Yorke, "The Python Control Systems Library (python-control)," 2021 60th IEEE Conference on Decision and Control (CDC), 2021, pp. 4875-4881
+
+[2] Kravaris, C., & Kookos, I. K. (2021). *Understanding Process Dynamics and Control*. Cambridge University Press.  
