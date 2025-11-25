@@ -25,4 +25,5 @@ format:
     fig-align: center
     fig-height: 5
     fig-width: 6
+    css: styles.css
     # fig-responsive: true
