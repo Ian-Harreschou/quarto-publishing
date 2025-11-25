@@ -175,10 +175,17 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#constructing-transfer-functions" id="toc-constructing-transfer-functions" class="nav-link active" data-scroll-target="#constructing-transfer-functions">Constructing Transfer Functions</a></li>
-  <li><a href="#inputoutput-responses" id="toc-inputoutput-responses" class="nav-link" data-scroll-target="#inputoutput-responses">Input/Output Responses</a></li>
+  <li><a href="#common-graphical-techniques" id="toc-common-graphical-techniques" class="nav-link active" data-scroll-target="#common-graphical-techniques">Common Graphical Techniques</a>
+  <ul class="collapse">
   <li><a href="#frequency-analysis---bode-plots" id="toc-frequency-analysis---bode-plots" class="nav-link" data-scroll-target="#frequency-analysis---bode-plots">Frequency Analysis - Bode Plots</a></li>
   <li><a href="#root-locus-diagrams" id="toc-root-locus-diagrams" class="nav-link" data-scroll-target="#root-locus-diagrams">Root Locus Diagrams</a></li>
+  <li><a href="#phase-and-gain-margins" id="toc-phase-and-gain-margins" class="nav-link" data-scroll-target="#phase-and-gain-margins">Phase and Gain Margins</a></li>
+  </ul></li>
+  <li><a href="#core-functionalities-of-python-control" id="toc-core-functionalities-of-python-control" class="nav-link" data-scroll-target="#core-functionalities-of-python-control">Core Functionalities of Python-Control</a>
+  <ul class="collapse">
+  <li><a href="#constructing-transfer-functions" id="toc-constructing-transfer-functions" class="nav-link" data-scroll-target="#constructing-transfer-functions">Constructing Transfer Functions</a></li>
+  <li><a href="#inputoutput-responses" id="toc-inputoutput-responses" class="nav-link" data-scroll-target="#inputoutput-responses">Input/Output Responses</a></li>
+  </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -210,41 +217,432 @@ window.Quarto = {
 
 
 <hr>
-<p>This demonstration takes advantage of the <code>python-control</code> package to illustrate tools available for computational / numerical process modeling and control. This package implements basic operations for modeling control systems. Find the documentation for an installation guide and tutorials <a href="https://python-control.readthedocs.io/en/0.10.2/index.html">here</a>.</p>
+<p>This demonstration takes advantage of the <code>python-control</code> package to illustrate tools available for computational / numerical process modeling and control. This package implements basic operations for modeling linear, time-invariant (as well as nonlinear, discrete, and stochastic) control systems. Find the documentation for an installation guide and tutorials <a href="https://python-control.readthedocs.io/en/0.10.2/index.html">here</a>.<span class="math inline">\(^{[1]}\)</span></p>
 <hr>
-<div id="0a98379e" class="cell" data-execution_count="1">
+<div id="a6474ffd" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preamble to import packages (renamed using 'import &lt;package&gt; as &lt;name&gt;')</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> control <span class="im">as</span> ctrl</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown, display <span class="co"># to make HTML/Markdown play nicer</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<section id="constructing-transfer-functions" class="level3">
-<h3 class="anchored" data-anchor-id="constructing-transfer-functions">Constructing Transfer Functions</h3>
-<p>Before we look at the behavior of transfer functions, we need to know how to construct them.</p>
-<p>In the <code>control</code> package we can do this a number of ways–such as via state-space representation–but one of the most intuitive or beginner-friendly methods is by defining our symbolic <span class="math inline">\(s\)</span>, then using standard algebraic operations to build the polynomials of the transfer function <span class="math inline">\(G(s)\)</span>.</p>
-<p><code>control</code> includes a “factory function” <code>tf()</code> to construct objects of the <code>TransferFunction</code> class for this purpose.</p>
-<div id="fa36c56b" class="cell" data-execution_count="2">
+<section id="common-graphical-techniques" class="level2">
+<h2 class="anchored" data-anchor-id="common-graphical-techniques">Common Graphical Techniques</h2>
+<p>We’ll jump right in with some high-level plotting functionalities that <code>control</code> provides, namely in generating Bode plots and root locus diagrams.</p>
+<section id="frequency-analysis---bode-plots" class="level3">
+<h3 class="anchored" data-anchor-id="frequency-analysis---bode-plots">Frequency Analysis - Bode Plots</h3>
+<p>Recall the utility of Bode plots. They are a graphical tool used to visualize how a given transfer function responds to an oscillatory input, of the form,</p>
+<p><span class="math display">\[u(t) = A\sin{\omega t + \phi}\]</span></p>
+<p>for a specified amplitude <span class="math inline">\(A\)</span>, frequency of oscillation <span class="math inline">\(\omega\)</span>, and phase shift <span class="math inline">\(\phi\)</span>. The Bode plot shows the magnitude (amplitude ratio) of oscillations that will be observed in the output, as well as the response’s phase shift.</p>
+<p>These plots quickly show us how “well” the dynamics of our system can keep up with</p>
+<p>Consider a transfer function <span class="math display">\[G(s) = \frac{1}{(\tau_{1}s + 1)(\tau_{2}s + 1)}\]</span></p>
+<p>with two poles <span class="math inline">\(p_{1}, p_{2}\)</span> at <span class="math inline">\(s = -\frac{1}{\tau_{1}}, -\frac{1}{\tau_{2}}\)</span> for <span class="math inline">\(\tau_{1}, \tau_{2} = 1, \ 10\)</span>.</p>
+<div id="0eb87fe6" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> ctrl.tf(<span class="st">'s'</span>) <span class="co"># define 's' as a TransferFunction class</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>s <span class="op">+</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>t1, t2 <span class="op">=</span> <span class="dv">1</span>, <span class="dv">10</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>G1 <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((t1<span class="op">*</span>s <span class="op">+</span> <span class="dv">1</span>)<span class="op">*</span>(t2<span class="op">*</span>s <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>ctrl.bode_plot(G1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="controls_files/figure-html/cell-3-output-1.png" width="664" height="475" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="root-locus-diagrams" class="level3">
+<h3 class="anchored" data-anchor-id="root-locus-diagrams">Root Locus Diagrams</h3>
+<p>Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies – usually the controller gain <span class="math inline">\(K_c\)</span>. Here, we’ll look at a few familiar systems from homework. Consider the following open-loop transfer functions, for two systems under PI-control:</p>
+<p><span class="math display">\[L_{1}(s) = \frac{\frac{K_{c}}{1.5}(1.5s+1)}{s(2s+1)(s+1)}\]</span></p>
+<p><span class="math display">\[L_{2}(s) = \frac{\frac{K_{c}}{0.5}(0.5s+1)}{s(2s+1)(s+1)}\]</span></p>
+<div id="aea3d36f" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>tau_I <span class="op">=</span> <span class="fl">1.5</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>Gv <span class="op">=</span> <span class="dv">1</span> <span class="co"># tf of a gate valve (unity loop)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>Gm <span class="op">=</span> <span class="dv">1</span> <span class="co"># tf of a measurement device (unity loop)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((<span class="dv">2</span><span class="op">*</span>s<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># tf of the process</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>Gc <span class="op">=</span> Kc <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span> <span class="op">/</span> (tau_I<span class="op">*</span>s)) <span class="co"># tf of the controller</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>Gol <span class="op">=</span> Gv<span class="op">*</span>Gm<span class="op">*</span>Gp<span class="op">*</span>Gc</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>ctrl.root_locus_plot(Gol)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Ignoring fixed x limits to fulfill fixed data aspect with adjustable data limits.</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="controls_files/figure-html/cell-4-output-2.png" width="849" height="849" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="151e58bf" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>tau_I <span class="op">=</span> <span class="fl">1.5</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>Gc <span class="op">=</span> Kc <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span> <span class="op">/</span> (tau_I<span class="op">*</span>s)) <span class="co"># tf of the controller</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>Gol <span class="op">=</span> Gv<span class="op">*</span>Gm<span class="op">*</span>Gp<span class="op">*</span>Gc</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>ctrl.root_locus_plot(Gol)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Ignoring fixed x limits to fulfill fixed data aspect with adjustable data limits.</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="controls_files/figure-html/cell-5-output-2.png" width="849" height="849" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="phase-and-gain-margins" class="level3">
+<h3 class="anchored" data-anchor-id="phase-and-gain-margins">Phase and Gain Margins</h3>
+<p>Phase and gain margins are quantitative measures of relative stability of closed-loop systems, or their ‘robustness’ to model uncertainty and process variation.<span class="math inline">\(^{[2]}\)</span></p>
+<p>These quantities essentially tell us how far away from <em>marginal stability</em> the system is, so that we can integrate some semblance of safety into operations.</p>
+<p>Quickly, we will review a few definitions, and then introduce the newer ones.</p>
+<p><strong>(Open) Loop transfer function <span class="math inline">\(L(s)\)</span></strong> – the product of the controller transfer function <span class="math inline">\(G_c(s)\)</span> with an overall process transfer function <span class="math inline">\(G(s)\)</span> (which includes the physical process, any sensors/measurement devices, and control elements such as valves).</p>
+<p><span class="math display">\[L(s) = G_c(s)G_v(s)G_p(s)G_m(s) = G_c(s)G(s)\]</span></p>
+<p><strong>Marginal stability</strong> – the point at which we observe sustained (non-decaying) oscillations in our output, when the input to the system is a sinusoidal function. <span class="math display">\[1 + L(s=i \omega_u) = 0\]</span></p>
+<p>Or,</p>
+<p><span class="math display">\[L(s = i \omega_u) = -1\]</span></p>
+<p>for an “ultimate” value of <span class="math inline">\(K_c = K_{cu}, \omega = \omega_{u}\)</span>, above which we become unstable, as the poles will begin moving into the right half of the <em>Re-Im</em> plane.</p>
+<p><strong>Phase crossover (or <em>critical</em>) frequency <span class="math inline">\(\omega_p\)</span></strong> – the frequency at which the phase of the loop transfer function becomes equal to <span class="math inline">\(-180 ^{\circ}\)</span>.</p>
+<p><span class="math display">\[ \omega_p : \angle {L(i \omega_p)} = -180 ^{\circ}\]</span></p>
+<p><strong>Gain crossover frequency <span class="math inline">\(\omega_g\)</span></strong> – the frequency at which the magnitude of <span class="math inline">\(L(s)\)</span> becomes equal to one,</p>
+<p><span class="math display">\[ \omega_g : |L(i\omega_g)|=1\]</span></p>
+<p>With these, we can introduce the phase and gain margins.</p>
+<p><strong>Phase margin</strong> <em>PM</em> – the phase shift of the loop transfer function at <span class="math inline">\(\omega_g\)</span> necessary to cause the system to reach <em>marginal stability</em>.</p>
+<p>Another interpretation is the <em>distance</em> on the phase diagram between the current phase shift and <span class="math inline">\(-180^{\circ}\)</span>.</p>
+<p><span class="math display">\[PM = \arg \big \{ L(i \omega_g) \big \} - (-180^{\circ})\]</span></p>
+<p><strong>Gain margin</strong> <em>GM</em> – the factor by which we can scale/multiply the controller gain before the onset of instability</p>
+<p><span class="math display">\[GM = \frac{1}{|L(i \omega_p)|}\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Remember that increasing <span class="math inline">\(K_c\)</span> shifts the amplitude ratio of our transfer function upward on a Bode diagram, while leaving the phase shift unchanged. The opposite is true for a system with time delay; the phase shift will necessarily change, but the magnitude will be left unmodified!</p>
+</div>
+</div>
+<p>A <mark>high gain margin</mark> corresponds to a system that is <mark>far away from instability</mark>, but there is a tradeoff, as our controller responds sluggishly.</p>
+<p>A <mark>large phase margin</mark> is also a sign that <mark>the system is far from instability</mark> – there is a safety margin for how much time delay the system can handle before seeing sustained (or worse, growing) oscillations in the output.</p>
+<hr>
+<section id="example1" class="level4">
+<h4 class="anchored" data-anchor-id="example1">Example<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></h4>
+<p>As an illustration of these quantities, take the following PI- controller, aiming to control some 3rd order process:</p>
+<p><span class="math display">\[G(s) = \frac{K}{(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)}\]</span></p>
+<p>for <span class="math inline">\(\tau_1, \tau_2, \tau_3 = 1, 1/2, 1/3\)</span>.</p>
+<p>Our controller has both P- and I-action, which will look like: <span class="math display">\[G_c(s) = K_c (1 + \frac{1}{\tau_I s})\]</span></p>
+<p>with a chosen value of <span class="math inline">\(\tau_I = 1/3\)</span>.</p>
+<p>We are told the product of our process and controller gains are non-zero, e.g.&nbsp;<span class="math inline">\(K_c K &gt; 0\)</span>, and from a previous example we want to look at the case where <span class="math inline">\(K_c K = 0.5\)</span></p>
+<div id="8bdf09f3" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="dv">1</span> <span class="co"># loop transfer function (process) gain</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="fl">0.5</span> <span class="co"># controller gain</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>t1, t2, t3 <span class="op">=</span> <span class="dv">1</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">3</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>tI <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">3</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> K <span class="op">/</span> ((t1<span class="op">*</span>s <span class="op">+</span> <span class="dv">1</span>)<span class="op">*</span>(t2<span class="op">*</span>s <span class="op">+</span> <span class="dv">1</span>)<span class="op">*</span>(t3<span class="op">*</span>s<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>Gc <span class="op">=</span> Kc <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>(tI<span class="op">*</span>s))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> Gc <span class="op">*</span> G</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>gm, pm, sm, wpc, wgc, wms <span class="op">=</span> ctrl.stability_margins(L)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>ctrl.bode_plot(L)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="controls_files/figure-html/cell-6-output-1.png" width="664" height="475" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="154a1ed5" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>table_md <span class="op">=</span> <span class="ss">f"""</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ss">| Parameter | Value |</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ss">|:---------:|:-----:|</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ss">| $</span><span class="ch">\\</span><span class="ss">omega_</span><span class="ch">{{</span><span class="ss">pc</span><span class="ch">}}</span><span class="ss">$ | </span><span class="sc">{</span>wpc<span class="sc">:.3f}</span><span class="ss"> |</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ss">| $</span><span class="ch">\\</span><span class="ss">omega_</span><span class="ch">{{</span><span class="ss">gc</span><span class="ch">}}</span><span class="ss">$ | </span><span class="sc">{</span>wgc<span class="sc">:.3f}</span><span class="ss"> |</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ss">| $GM$            | </span><span class="sc">{</span>gm<span class="sc">:.3f}</span><span class="ss">  |</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ss">| $PM$            | </span><span class="sc">{</span>pm<span class="sc">:.1f}</span><span class="ss">° |</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>display(Markdown(table_md))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\omega_{pc}\)</span></td>
+<td style="text-align: center;">1.414</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(\omega_{gc}\)</span></td>
+<td style="text-align: center;">0.969</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(GM\)</span></td>
+<td style="text-align: center;">2.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(PM\)</span></td>
+<td style="text-align: center;">20.0°</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Do we expect this open-loop transfer function to be step-stable? What might the “output” look like when we simulate a step input?</p>
+<p>How about for the fully-connected, closed-loop response?</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recall the poles of our <span class="math inline">\(L(s)\)</span> are purely real, and lie in the left-hand portion of the <em>Re-Im</em> plane.</p>
+<p><span class="math display">\[ L(s) = (1 + \frac{1}{\tau_I s}) \frac{k_c k}{(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} \]</span></p>
+<p><span class="math display">\[ = (\tau_I s + 1) \frac{k_c k}{(\tau_I s)(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} \]</span></p>
+</div>
+</div>
+<p>If we have a standard unity feedback loop, the closed-loop response to a change in setpoint will be:</p>
+<p><span class="math display">\[G_{CL,sp} = \frac{L(s)}{1 + L(s)}\]</span></p>
+<p>and for a step input, we see the following behavior.</p>
+<div id="3d697c47" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">25</span>,num<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.step_response(L <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> L), t)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$G_CL(t)$'</span>, <span class="ss">f'$u(t) = M(t)$'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="controls_files/figure-html/cell-8-output-1.png" width="664" height="478" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As we might expect, there’s an initial overshoot, oscillatory behavior, and then the system settles to our setpoint with no steady-state error.</p>
+<p>Now, let’s make use the calculated gain and phase margins to push this system to the brink of instability to confirm the behavior is as we expect!</p>
+<p>In this scenario, <span class="math inline">\((K_c K)_{new} = GM(K_c K)_{old}\)</span></p>
+<div id="f6965264" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">25</span>,num<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> L <span class="op">*</span> gm <span class="co"># scale the original loop transfer function by the previously calculated gain margin</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.step_response(L <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> L), t)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$G_CL(t)$'</span>, <span class="ss">f'$u(t) = M(t)$'</span>])</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>gm, pm, sm, wpc, wgc, wms <span class="op">=</span> ctrl.stability_margins(L)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="controls_files/figure-html/cell-9-output-1.png" width="664" height="478" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="6b1d1f02" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>table_md <span class="op">=</span> <span class="ss">f"""</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ss">| Parameter | Value |</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ss">|:---------:|:-----:|</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ss">| $</span><span class="ch">\\</span><span class="ss">omega_</span><span class="ch">{{</span><span class="ss">pc</span><span class="ch">}}</span><span class="ss">$ | </span><span class="sc">{</span>wpc<span class="sc">:.3f}</span><span class="ss"> |</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ss">| $</span><span class="ch">\\</span><span class="ss">omega_</span><span class="ch">{{</span><span class="ss">gc</span><span class="ch">}}</span><span class="ss">$ | </span><span class="sc">{</span>wgc<span class="sc">:.3f}</span><span class="ss"> |</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ss">| $GM$            | </span><span class="sc">{</span>gm<span class="sc">:.3f}</span><span class="ss">  |</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="ss">| $PM$            | </span><span class="sc">{</span>pm<span class="sc">:.1f}</span><span class="ss">° |</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>display(Markdown(table_md))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\omega_{pc}\)</span></td>
+<td style="text-align: center;">1.414</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(\omega_{gc}\)</span></td>
+<td style="text-align: center;">1.414</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(GM\)</span></td>
+<td style="text-align: center;">1.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(PM\)</span></td>
+<td style="text-align: center;">0.0°</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Notice in this table, that the phase crossover frequency <span class="math inline">\(w_{pc}\)</span> did not change (indicating the phase shift of the system was unmodified), yet the gain crossover frequency <span class="math inline">\(w_{gc}\)</span> did! Additionally, these two are coincident at <span class="math inline">\(\omega = \sqrt(2)\)</span></p>
+<p>Also, we can see that <span class="math inline">\(GM = 1\)</span>, <span class="math inline">\(PM = 0^{\circ}\)</span>, indicating the gains can’t be scaled any further, and the system can’t handle any more time delay before becoming unstable.</p>
+<p>Finally, just to hit the concepts home, we’ll simulate what happens when we increase the gains even further, despite having no wiggle room.</p>
+<div id="f23e2f78" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">25</span>,num<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> L <span class="op">*</span> (gm<span class="op">+</span><span class="fl">0.05</span>) <span class="co"># scale the loop transfer function by the gain margin plus some small value</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.step_response(L <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> L), t)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$G_CL(t)$'</span>, <span class="ss">f'$u(t) = M(t)$'</span>])</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>gm, pm, sm, wpc, wgc, wms <span class="op">=</span> ctrl.stability_margins(L)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>ctrl.bode_plot(L)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="controls_files/figure-html/cell-11-output-1.png" width="664" height="478" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="controls_files/figure-html/cell-11-output-2.png" width="664" height="475" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="d54c51d5" class="cell" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>table_md <span class="op">=</span> <span class="ss">f"""</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ss">| Parameter | Value |</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ss">|:---------:|:-----:|</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ss">| $</span><span class="ch">\\</span><span class="ss">omega_</span><span class="ch">{{</span><span class="ss">pc</span><span class="ch">}}</span><span class="ss">$ | </span><span class="sc">{</span>wpc<span class="sc">:.3f}</span><span class="ss"> |</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ss">| $</span><span class="ch">\\</span><span class="ss">omega_</span><span class="ch">{{</span><span class="ss">gc</span><span class="ch">}}</span><span class="ss">$ | </span><span class="sc">{</span>wgc<span class="sc">:.3f}</span><span class="ss"> |</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ss">| $GM$            | </span><span class="sc">{</span>gm<span class="sc">:.3f}</span><span class="ss">  |</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="ss">| $PM$            | </span><span class="sc">{</span>pm<span class="sc">:.1f}</span><span class="ss">° |</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>display(Markdown(table_md))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\omega_{pc}\)</span></td>
+<td style="text-align: center;">1.414</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(\omega_{gc}\)</span></td>
+<td style="text-align: center;">1.449</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(GM\)</span></td>
+<td style="text-align: center;">0.952</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(PM\)</span></td>
+<td style="text-align: center;">-1.3°</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Since we’ve pushed the gains of the system and controller too far, now our gain margin is a factor less than 1, and our phase margin is negative.</p>
+</section>
+</section>
+</section>
+<section id="core-functionalities-of-python-control" class="level2">
+<h2 class="anchored" data-anchor-id="core-functionalities-of-python-control">Core Functionalities of Python-Control</h2>
+<section id="constructing-transfer-functions" class="level3">
+<h3 class="anchored" data-anchor-id="constructing-transfer-functions">Constructing Transfer Functions</h3>
+<p>Before we look at the behavior of transfer functions, we need to know how to construct them.</p>
+<p>In the <code>control</code> package we can do this a number of ways–such as via state-space representation–but one of the most intuitive or beginner-friendly methods is by defining our symbolic <span class="math inline">\(s\)</span>, then using standard algebraic operations to build the polynomials of the transfer function <span class="math inline">\(G(s)\)</span>. This is done already in one of the code cells for the Bode / root locus plots, but is shown again in the following cell.</p>
+<p><code>control</code> includes a “factory function” <code>tf()</code> to construct objects of the <code>TransferFunction</code> class for this purpose.</p>
+<div id="a6c11149" class="cell" data-execution_count="12">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> ctrl.tf(<span class="st">'s'</span>) <span class="co"># define 's' as a TransferFunction class</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>s <span class="op">+</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>In this code cell, we are constructing</p>
 <p><span class="math display">\[G(s) = \frac{1}{2s + 1}\]</span></p>
 <p>by using standard operations with the derivative operator ‘s’.</p>
 <p>If we wanted to add more information to the transfer function, e.g.&nbsp;a name, or particular tags for inputs/outputs, we can explicitly provide arrays of numbers representing the powers of ‘s’ in the numerator / denominator, then pass additional keywords for namings.</p>
-<div id="0b1bce4e" class="cell" data-execution_count="3">
+<div id="0ee7b1eb" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>num <span class="op">=</span> [<span class="fl">2.5</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>den <span class="op">=</span> [<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">4</span>, <span class="dv">6</span>]</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> ctrl.tf(num, den, name <span class="op">=</span> <span class="st">'Gc'</span>, inputs <span class="op">=</span> [<span class="st">'Ysp'</span>], outputs <span class="op">=</span> [<span class="st">'Y'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>num <span class="op">=</span> [<span class="fl">2.5</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>den <span class="op">=</span> [<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">4</span>, <span class="dv">6</span>]</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> ctrl.tf(num, den, name <span class="op">=</span> <span class="st">'Gc'</span>, inputs <span class="op">=</span> [<span class="st">'Ysp'</span>], outputs <span class="op">=</span> [<span class="st">'Y'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>This cell constructs a transfer function</p>
@@ -259,159 +657,90 @@ window.Quarto = {
 <p>Again, <code>control</code> provides tools for this analysis, with the <code>step_response</code>, <code>impulse_response</code>, and <code>forced_response</code> functions.</p>
 <section id="impulse-response" class="level4">
 <h4 class="anchored" data-anchor-id="impulse-response">Impulse Response</h4>
-<div id="f9fe8931" class="cell" data-execution_count="4">
+<p>Consider an impulse signal at <span class="math inline">\(t_{0}=0\)</span> of size 1, such that our input <span class="math inline">\(u(t)=\delta(t)\)</span>:</p>
+<div id="50568a92" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.impulse_response(Gp)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$y(t)$'</span>, <span class="ss">f'$u(t) = </span><span class="ch">\\</span><span class="ss">delta(t)$'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.impulse_response(Gp)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$y(t)$'</span>, <span class="ss">f'$u(t) = </span><span class="ch">\\</span><span class="ss">delta(t)$'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="controls_files/figure-html/cell-5-output-1.png" width="664" height="478" class="figure-img"></p>
+<p><img src="controls_files/figure-html/cell-15-output-1.png" width="664" height="478" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
+<p><strong>Note: Plotting a delta function doesn’t make a ton of sense by its definition, so <span class="math inline">\(u(t)\)</span> plotted in red here is not accurate. We’d need to make a special graphic or function to plot it true-to-form…</strong></p>
 </section>
 <section id="step-response" class="level4">
 <h4 class="anchored" data-anchor-id="step-response">Step Response</h4>
-<div id="d45eaaea" class="cell" data-execution_count="5">
+<p>How will the system respond to a constant step input of the form <span class="math inline">\(u(t) = M\)</span>, with <span class="math inline">\(M = 1\)</span>:</p>
+<div id="91dd0d05" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.step_response(Gp)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$y(t)$'</span>, <span class="ss">f'$u(t) = 1$'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.step_response(Gp)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$y(t)$'</span>, <span class="ss">f'$u(t) = 1$'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="controls_files/figure-html/cell-6-output-1.png" width="664" height="478" class="figure-img"></p>
+<p><img src="controls_files/figure-html/cell-16-output-1.png" width="664" height="478" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>Notice, with this form of transfer function, our system never reaches the value of the step input, giving us a <strong>non-zero steady-state offset</strong>(generally undesirable) and persistent error.</p>
 </section>
 <section id="forced-response" class="level4">
 <h4 class="anchored" data-anchor-id="forced-response">Forced Response</h4>
-<div id="f05d1b80" class="cell" data-execution_count="6">
+<p>We can also simulate how the process will respond to an arbitrary input, i.e.&nbsp;a ramp forcing function <span class="math inline">\(u(t) = t\)</span>:</p>
+<div id="800bcb4d" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">7</span>, num<span class="op">=</span><span class="dv">300</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.forced_response(Gp, t, t)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$y(t)$'</span>, <span class="ss">f'$u(t) = t$'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">7</span>, num<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>resp <span class="op">=</span> ctrl.forced_response(Gp, t, t)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$y(t)$'</span>, <span class="ss">f'$u(t) = t$'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="controls_files/figure-html/cell-7-output-1.png" width="664" height="478" class="figure-img"></p>
+<p><img src="controls_files/figure-html/cell-17-output-1.png" width="664" height="478" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>In this case, our process is always trying to keep up with the ramp function, but ultimately won’t close the gap. This also yields a non-zero steady-state offset and persistent error, however we might see the system reach a steady-state <strong>difference</strong> in signals over a long enough time period. Fun, right?</p>
 <hr>
 </section>
 </section>
-<section id="frequency-analysis---bode-plots" class="level3">
-<h3 class="anchored" data-anchor-id="frequency-analysis---bode-plots">Frequency Analysis - Bode Plots</h3>
-<p>Recall the utility of Bode plots. They are a graphical tool used to visualize how a given transfer function responds to an oscillatory input, of the form,</p>
-<p><span class="math display">\[u(t) = A\sin{\omega t + \phi}\]</span></p>
-<p>for a specified amplitude <span class="math inline">\(A\)</span>, frequency of oscillation <span class="math inline">\(\omega\)</span>, and phase shift <span class="math inline">\(\phi\)</span>. The Bode plot shows the magnitude (amplitude ratio) of oscillations that will be observed in the output, as well as the response’s phase shift.</p>
-<p>These plots quickly show us how “well” the dynamics of our system can keep up with</p>
-<p>Consider a transfer function <span class="math display">\[G(s) = \frac{1}{(\tau_{1}s + 1)(\tau_{2}s + 1)}\]</span></p>
-<p>with two poles (<span class="math inline">\(p_{1}, p_{2}\)</span>) at <span class="math inline">\(s = -\frac{1}{\tau_{1}}, -\frac{1}{\tau_{2}}\)</span> for <span class="math inline">\(\tau_{1}, \tau_{2} = 1, \ 10\)</span>.</p>
-<div id="cda2f038" class="cell" data-execution_count="7">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t1, t2 <span class="op">=</span> <span class="dv">1</span>, <span class="dv">10</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>G1 <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((t1<span class="op">*</span>s <span class="op">+</span> <span class="dv">1</span>)<span class="op">*</span>(t2<span class="op">*</span>s <span class="op">+</span> <span class="dv">1</span>))</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ctrl.bode_plot(G1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="controls_files/figure-html/cell-8-output-1.png" width="664" height="475" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<hr>
 </section>
-<section id="root-locus-diagrams" class="level3">
-<h3 class="anchored" data-anchor-id="root-locus-diagrams">Root Locus Diagrams</h3>
-<p>Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies – usually the controller gain <span class="math inline">\(K_c\)</span>. Here, we’ll look at a few familiar systems from homework. Consider the following open-loop transfer functions, for two systems under PI-control:</p>
-<p><span class="math display">\[L_{1}(s) = \frac{\frac{K_{c}}{1.5}(1.5s+1)}{s(2s+1)(s+1)}\]</span></p>
-<p><span class="math display">\[L_{2}(s) = \frac{\frac{K_{c}}{0.5}(0.5s+1)}{s(2s+1)(s+1)}\]</span></p>
-<div id="7b083b09" class="cell" data-execution_count="8">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>tau_I <span class="op">=</span> <span class="fl">1.5</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>Gv <span class="op">=</span> <span class="dv">1</span> <span class="co"># tf of a gate valve (unity loop)</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>Gm <span class="op">=</span> <span class="dv">1</span> <span class="co"># tf of a measurement device (unity loop)</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((<span class="dv">2</span><span class="op">*</span>s<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># tf of the process</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>Gc <span class="op">=</span> Kc <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span> <span class="op">/</span> (tau_I<span class="op">*</span>s)) <span class="co"># tf of the controller</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>Gol <span class="op">=</span> Gv<span class="op">*</span>Gm<span class="op">*</span>Gp<span class="op">*</span>Gc</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>ctrl.root_locus_plot(Gol)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Ignoring fixed x limits to fulfill fixed data aspect with adjustable data limits.</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="controls_files/figure-html/cell-9-output-2.png" width="849" height="849" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<div id="837613b9" class="cell" data-execution_count="9">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>tau_I <span class="op">=</span> <span class="fl">1.5</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>Gc <span class="op">=</span> Kc <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span> <span class="op">/</span> (tau_I<span class="op">*</span>s)) <span class="co"># tf of the controller</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>Gol <span class="op">=</span> Gv<span class="op">*</span>Gm<span class="op">*</span>Gp<span class="op">*</span>Gc</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>ctrl.root_locus_plot(Gol)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Ignoring fixed x limits to fulfill fixed data aspect with adjustable data limits.</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="controls_files/figure-html/cell-10-output-2.png" width="849" height="849" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="references" class="level3">
-<h3 class="anchored" data-anchor-id="references">References</h3>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>[1] S. Fuller, B. Greiner, J. Moore, R. Murray, R. van Paassen and R. Yorke, “The Python Control Systems Library (python-control),” 2021 60th IEEE Conference on Decision and Control (CDC), 2021, pp.&nbsp;4875-4881</p>
+<p>[2] Kravaris, C., &amp; Kookos, I. K. (2021). <em>Understanding Process Dynamics and Control</em>. Cambridge University Press.</p>
 
 
 
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>See Kravaris &amp; Kookos, Ch. 17.2, Example 17.4, “<em>PM and GM of a third-order system under PI control</em>”.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
