@@ -1,12 +1,33 @@
-/* styles.css */
+/* styles.css
 .qmd-content figure, .qmd-content img, .quarto-content figure, .quarto-content img {
   max-width: 100%;
   height: auto;
   box-sizing: border-box;
 }
 
-/* slightly reduce figure margin if needed */
-.qmd-content figure.figure {
+slightly reduce figure margin if needed */
+/* .qmd-content figure.figure { */
+  /* margin-left: auto; */
+  /* margin-right: auto; */
+/* } */
+
+/* Remove horizontal scrollbars caused by Quarto container clipping */
+.quarto-content,
+.quarto-content .content,
+.quarto-content .figure,
+.quarto-content .plotly,
+.cell-output-display,
+figure,
+div.figure {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+.quarto-content img,
+.quarto-content canvas {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
   margin-left: auto;
   margin-right: auto;
 }
