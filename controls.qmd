@@ -1,5 +1,7 @@
 ---
-title: Graphical Techniques
+title: Plotting Functionalities
+
+page-link: true
 
 toc: true
 toc-title: Contents
@@ -290,8 +292,6 @@ display(Markdown(table_md))
 ```
 
 Since we've pushed the gains of the system and controller too far, now our gain margin is a factor less than 1, and our phase margin is negative.
-
-
 
 ## References
 

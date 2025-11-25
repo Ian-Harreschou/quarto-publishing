@@ -1,6 +1,8 @@
 ---
 title: Python-Control Basics
 
+page-link: true
+
 toc: true
 toc-title: Contents
 toc-location: left
@@ -124,3 +126,9 @@ resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$'
 In this case, our process is always trying to keep up with the ramp function, but ultimately won't close the gap. This also yields a non-zero steady-state offset and persistent error, however we might see the system reach a steady-state **difference** in signals over a long enough time period. Fun, right?
 
 ---
+
+## References
+
+[1] S. Fuller, B. Greiner, J. Moore, R. Murray, R. van Paassen and R. Yorke, "The Python Control Systems Library (python-control)," 2021 60th IEEE Conference on Decision and Control (CDC), 2021, pp. 4875-4881
+
+[2] Kravaris, C., & Kookos, I. K. (2021). *Understanding Process Dynamics and Control*. Cambridge University Press.  
