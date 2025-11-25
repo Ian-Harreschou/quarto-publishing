@@ -22,3 +22,7 @@ website:
 format:
   html:
     page-navigation: true
+    fig-align: center
+    fig-height: 5
+    fig-width: 6
+    # fig-responsive: true

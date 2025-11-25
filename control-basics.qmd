@@ -37,11 +37,13 @@ from IPython.display import Markdown, display # to make HTML/Markdown play nicer
 
 In order to do these simulations, the first step is learning how to actually construct transfer functions using the various machinery offered via the package.
 
+---
+
 ### Constructing Transfer Functions
 
 Before we look at the behavior of transfer functions, we need to know how to construct them. 
 
-In the `control` package we can do this a number of ways--such as via state-space representation--but one of the most intuitive or beginner-friendly methods is by defining our symbolic $s$, then using standard algebraic operations to build the polynomials of the transfer function $G(s)$. This is done already in one of the code cells for the Bode / root locus plots, but is shown again in the following cell.
+In the `control` package we can do this a number of ways--such as via state-space representation--but one of the most intuitive or beginner-friendly methods is by defining our symbolic $s$, then using standard algebraic operations to build the polynomials of the transfer function $G(s)$.
 
 `control` includes a "factory function" `tf()` to construct objects of the `TransferFunction` class for this purpose.
 
@@ -82,6 +84,8 @@ If the system is stable, the time-domain response will settle. This could be to 
 
 Again, `control` provides tools for this analysis, with the `step_response`, `impulse_response`, and `forced_response` functions.
 
+---
+
 #### Impulse Response
 
 Consider an impulse signal at $t_{0}=0$ of size 1, such that our input $u(t)=\delta(t)$:
@@ -96,6 +100,8 @@ resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$'
 
 **Note: Plotting a delta function doesn't make a ton of sense by its definition, so $u(t)$ plotted in red here is not accurate. We'd need to make a special graphic or function to plot it true-to-form...**
 
+---
+
 #### Step Response 
 
 How will the system respond to a constant step input of the form $u(t) = M$, with $M = 1$:
@@ -109,6 +115,8 @@ resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$y(t)$'
 ```
 
 Notice, with this form of transfer function, our system never reaches the value of the step input, giving us a **non-zero steady-state offset**(generally undesirable) and persistent error.
+
+---
 
 #### Forced Response
 

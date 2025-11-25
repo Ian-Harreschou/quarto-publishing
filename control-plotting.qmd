@@ -39,6 +39,8 @@ from IPython.display import Markdown, display # to make HTML/Markdown play nicer
 
 We'll jump right in with some high-level plotting functionalities that `control` provides, namely in generating Bode plots and root locus diagrams.
 
+---
+
 ### Frequency Analysis - Bode Plots
 
 Recall the utility of Bode plots. They are a graphical tool used to visualize how a given transfer function responds to an oscillatory input, of the form,
@@ -47,7 +49,7 @@ $$u(t) = A\sin{\omega t + \phi}$$
 
 for a specified amplitude $A$, frequency of oscillation $\omega$, and phase shift $\phi$. The Bode plot shows the magnitude (amplitude ratio) of oscillations that will be observed in the output, as well as the response's phase shift.
 
-These plots quickly show us how "well" the dynamics of our system can keep up with
+These plots quickly show us how "well" the dynamics of our system can keep up with this sinusoidal input, as a [function of the incoming frequency of oscillation]{.mark}
 
 Consider a transfer function
 $$G(s) = \frac{1}{(\tau_{1}s + 1)(\tau_{2}s + 1)}$$
@@ -67,11 +69,11 @@ ctrl.bode_plot(G1)
 
 ### Root Locus Diagrams
 
-Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies -- usually the controller gain $K_c$. Here, we'll look at a few familiar systems from homework. Consider the following open-loop transfer functions, for two systems under PI-control:
+Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies -- usually the controller gain $K_c$. Here, we'll look at one system from homework. Consider the following open-loop transfer function, a process controller with PI-control:
 
-$$L_{1}(s) = \frac{\frac{K_{c}}{1.5}(1.5s+1)}{s(2s+1)(s+1)}$$
+$$L(s) = \frac{\frac{K_{c}}{1.5}(1.5s+1)}{s(2s+1)(s+1)}$$
 
-$$L_{2}(s) = \frac{\frac{K_{c}}{0.5}(0.5s+1)}{s(2s+1)(s+1)}$$
+Written in this form, we can see that $\tau_I = 1.5$, and we have poles @ $s = 0, -1/2, -1$
 
 ```{python}
 Kc = 1 # placeholder gain to use in tf construction
@@ -84,23 +86,12 @@ Gm = 1 # tf of a measurement device (unity loop)
 Gp = 1 / ((2*s+1)*(s + 1)) # tf of the process
 Gc = Kc * (1 + 1 / (tau_I*s)) # tf of the controller
 
-Gol = Gv*Gm*Gp*Gc
+Gol = Gv*Gm*Gp*Gc;
 
-ctrl.root_locus_plot(Gol)
+ctrl.root_locus_plot(Gol, initial_gain = 0);
 ```
 
-```{python}
-
-Kc = 1 # placeholder gain to use in tf construction
-
-tau_I = 1.5
-
-Gc = Kc * (1 + 1 / (tau_I*s)) # tf of the controller
-
-Gol = Gv*Gm*Gp*Gc
-
-ctrl.root_locus_plot(Gol)
-```
+---
 
 ### Phase and Gain Margins
 
@@ -207,9 +198,9 @@ How about for the fully-connected, closed-loop response?
 :::{.callout-important}
 Recall the poles of our $L(s)$ are purely real, and lie in the left-hand portion of the *Re-Im* plane.
 
-$$ L(s) = (1 + \frac{1}{\tau_I s}) \frac{k_c k}{(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} $$
+$$ L(s) = (1 + \frac{1}{\tau_I s}) \frac{K_c K}{(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} $$
 
-$$ = (\tau_I s + 1) \frac{k_c k}{(\tau_I s)(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} $$
+$$ = (\tau_I s + 1) \frac{K_c K}{(\tau_I s)(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} $$
 :::
 
 If we have a standard unity feedback loop, the closed-loop response to a change in setpoint will be:
@@ -292,6 +283,8 @@ display(Markdown(table_md))
 ```
 
 Since we've pushed the gains of the system and controller too far, now our gain margin is a factor less than 1, and our phase margin is negative.
+
+---
 
 ## References
 
