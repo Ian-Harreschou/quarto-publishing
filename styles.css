@@ -1,16 +1,3 @@
-/* styles.css
-.qmd-content figure, .qmd-content img, .quarto-content figure, .quarto-content img {
-  max-width: 100%;
-  height: auto;
-  box-sizing: border-box;
-}
-
-slightly reduce figure margin if needed */
-/* .qmd-content figure.figure { */
-  /* margin-left: auto; */
-  /* margin-right: auto; */
-/* } */
-
 /* Remove horizontal scrollbars caused by Quarto container clipping */
 .quarto-content,
 .quarto-content .content,

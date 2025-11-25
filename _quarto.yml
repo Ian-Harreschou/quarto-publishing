@@ -24,6 +24,5 @@ format:
     page-navigation: true
     fig-align: center
     fig-height: 5
-    fig-width: 6
+    fig-width: 5.5
     css: styles.css
-    # fig-responsive: true

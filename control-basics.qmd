@@ -29,8 +29,12 @@ This demonstration takes advantage of the `python-control` package to illustrate
 import numpy as np
 import control as ctrl
 import matplotlib.pyplot as plt
+import warnings
 
 from IPython.display import Markdown, display # to make HTML/Markdown play nicer
+
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", message="Ignoring fixed x limits")
 ```
 
 ## Core Functionalities of Python-Control
