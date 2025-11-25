@@ -1,5 +1,4 @@
 ---
-title: "Welcome to my Quarto site"
 format: html
 
 sidebar: false
