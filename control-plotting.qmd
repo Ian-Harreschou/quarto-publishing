@@ -31,8 +31,13 @@ This demonstration takes advantage of the `python-control` package to illustrate
 import numpy as np
 import control as ctrl
 import matplotlib.pyplot as plt
+import warnings
 
 from IPython.display import Markdown, display # to make HTML/Markdown play nicer
+
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", message="Ignoring fixed x limits")
+    warnings.filterwarnings("ignore", message="Ignoring fixed y limits to fulfill fixed data aspect with adjustable data limits.")
 ```
 
 ## Common Graphical Techniques
@@ -45,9 +50,9 @@ We'll jump right in with some high-level plotting functionalities that `control`
 
 Recall the utility of Bode plots. They are a graphical tool used to visualize how a given transfer function responds to an oscillatory input, of the form,
 
-$$u(t) = A\sin{\omega t + \phi}$$
+$$u(t) = A\sin({\omega t + \phi})$$
 
-for a specified amplitude $A$, frequency of oscillation $\omega$, and phase shift $\phi$. The Bode plot shows the magnitude (amplitude ratio) of oscillations that will be observed in the output, as well as the response's phase shift.
+for a specified amplitude $A$, frequency $\omega$, and phase shift $\phi$. The Bode plot shows the magnitude (amplitude ratio) of oscillations that will be observed in the output, as well as the response's phase shift.
 
 These plots quickly show us how "well" the dynamics of our system can keep up with this sinusoidal input, as a [function of the incoming frequency of oscillation]{.mark}
 
@@ -55,6 +60,8 @@ Consider a transfer function
 $$G(s) = \frac{1}{(\tau_{1}s + 1)(\tau_{2}s + 1)}$$
 
 with two poles $p_{1}, p_{2}$ at $s = -\frac{1}{\tau_{1}}, -\frac{1}{\tau_{2}}$ for $\tau_{1}, \tau_{2} = 1, \ 10$.
+
+With the transfer function properly constructed, we need only to call `control.bode_plot()` on it for a quick Bode diagram.
 
 ```{python}
 s = ctrl.tf('s') # define 's' as a TransferFunction class
@@ -65,31 +72,59 @@ G1 = 1 / ((t1*s + 1)*(t2*s + 1))
 ctrl.bode_plot(G1)
 ```
 
+At this point, we've seen and approximated many Bode plots. The key takeaways are: 
+
+1) the **amplitude ratio** represents the ratio of the output signal's frequency to that of the input signal. Once we reach a frequency where $AR < 1$, then the output signal becomes more and more attenuated as we continue to increase frequency. In essence, the input begins oscillating so quickly that the output isn't able to fully reach any maxima of the input -- this is precisely the [filtering effect]{.mark} we've discussed in the context of surge tanks that smooth incoming fluctuations in flowrate.
+
+2) the **phase shift** stems from the finite dynamics of the process, sensor, control elements, etc. The overall system can't instantaneously respond to the input, and this manifests as a delay (which is also a function of frequency). We care about the conditions under which we cross $-180^{\circ}$ because at that point, our output signal is completely inverted relative to the input -- maxima in input become minima in the output, which can be a problem for feedback schemes (depending on the magnitude at that point)!
+
 ---
 
 ### Root Locus Diagrams
 
-Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters varies -- usually the controller gain $K_c$. Here, we'll look at one system from homework. Consider the following open-loop transfer function, a process controller with PI-control:
+Root locus diagrams are graphical tools used to assess the stability of a system as one of its parameters is varried, usually the controller gain $K_c$. 
 
-$$L(s) = \frac{\frac{K_{c}}{1.5}(1.5s+1)}{s(2s+1)(s+1)}$$
+Here, we'll look at one system from homework. Consider the following open-loop transfer function (HW#7):
 
-Written in this form, we can see that $\tau_I = 1.5$, and we have poles @ $s = 0, -1/2, -1$
+$$L(s) = G_v G_c G_p G_m = K_{c} \Big( 1 + \frac{1}{\tau_I s} \Big) \frac{1}{(\tau_1 s + 1)(\tau_2 s + 1)}$$
+
+for $\tau_I = \frac{1}{2}, \tau_1, \tau_2 = 1, 2$.
+
+We can then form the [closed-loop response]{.mark}, and since it's assumed to be a unity feedback loop ($G_v = G_m = 1$), then it collapses into a neater form:
+
+$$G_{CL}(s) = \frac{L(s)}{1 + L(s)}$$
+
+$$G_{CL}(s) = \frac{G_v G_c G_p}{1 + G_v G_c G_p G_m} = \frac{K_{c} \Big( 1 + \frac{1}{\tau_I s} \Big) \frac{1}{(\tau_1 s + 1)(\tau_2 s + 1)}}{1 + K_{c} \Big( 1 + \frac{1}{\tau_I s} \Big) \frac{1}{(\tau_1 s + 1)(\tau_2 s + 1)}}$$
+
+This closed-loop had poles at $s = 0, -1, -\frac{1}{2}$, a zero at $s = -2$, a centroid at $\sigma = \frac{1}{4}$, and the breakaway was $s \approx -0.23$
+
+It's then straightforward to generate an initial root-locus diagram using `control.root_locus_plot()`!
 
 ```{python}
+
 Kc = 1 # placeholder gain to use in tf construction
 
-tau_I = 1.5
+t1, t2 = 1, 2; # time constants in the process and for measurement
+tI = 1/2 # integral time constant
 
-Gv = 1 # tf of a gate valve (unity loop)
-Gm = 1 # tf of a measurement device (unity loop)
+Gv = 1;
+Gm = 1;
 
-Gp = 1 / ((2*s+1)*(s + 1)) # tf of the process
-Gc = Kc * (1 + 1 / (tau_I*s)) # tf of the controller
+Gp = 1 / ((t1*s + 1)*(t2*s + 1))
+Gc = Kc * (1 + 1 / (tI*s))
 
-Gol = Gv*Gm*Gp*Gc;
+L = Gv * Gc * Gp * Gm;
 
-ctrl.root_locus_plot(Gol, initial_gain = 0);
+ctrl.root_locus_plot((Gv * Gp * Gc) / (1 + L), grid = False, xlim = (-2.5, 1.5), ylim = (-3, 3));
 ```
+
+:::{.callout-important}
+Wait! It appears some features are missing, such as the trajectories of the poles $p_1 = 0, p_2 = -\frac{1}{2}$ as they breakaway from the Re-axis and start diverging toward the Im-axis...
+:::
+
+Numerical routines such as the root-finding needed to generate a root-locus diagram are sensitive to numerical precision. Also, generating a diagram for a complex closed-loop transfer function is going to be inherently more complicated than a rather simple function, so key features might be missed by whichever algorithms the code developer included to be used by default.
+
+In the above scenario, you can increase the range of controller gains used in the calculations to capture the breakaway trajectories better, but this doesn't seem to work directly with the `control.root_locus_plot()` function. It's times like these where [by-hand approximations are sometimes the more robust approach!]{.mark}
 
 ---
 
@@ -217,7 +252,7 @@ resp = ctrl.step_response(L / (1 + L), t)
 resp.plot(plot_inputs='overlay', legend_map = ['upper left'], label = [f'$G_CL(t)$', f'$u(t) = M(t)$'])
 ```
 
-As we might expect, there's an initial overshoot, oscillatory behavior, and then the system settles to our setpoint with no steady-state error.
+As we might expect, there's an **initial overshoot**, **oscillation about the step value**, and then the system **settles to our setpoint with no steady-state error**.
 
 Now, let's make use the calculated gain and phase margins to push this system to the brink of instability to confirm the behavior is as we expect!
 
