@@ -1,0 +1,20 @@
+/* Remove horizontal scrollbars caused by Quarto container clipping */
+.quarto-content,
+.quarto-content .content,
+.quarto-content .figure,
+.quarto-content .plotly,
+.cell-output-display,
+figure,
+div.figure {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+.quarto-content img,
+.quarto-content canvas {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
