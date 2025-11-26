@@ -246,7 +246,7 @@ window.Quarto = {
 <hr>
 <p>This demonstration takes advantage of the <code>python-control</code> package to illustrate tools available for computational / numerical process modeling and control. This package implements basic operations for modeling linear, time-invariant (as well as nonlinear, discrete, and stochastic) control systems. Find the documentation for an installation guide and tutorials <a href="https://python-control.readthedocs.io/en/0.10.2/index.html">here</a>.<span class="math inline">\(^{[1]}\)</span></p>
 <hr>
-<div id="ff61ce93" class="cell" data-execution_count="1">
+<div id="1392ba61" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preamble to import packages (renamed using 'import &lt;package&gt; as &lt;name&gt;')</span></span>
@@ -275,7 +275,7 @@ window.Quarto = {
 <p>Consider a transfer function <span class="math display">\[G(s) = \frac{1}{(\tau_{1}s + 1)(\tau_{2}s + 1)}\]</span></p>
 <p>with two poles <span class="math inline">\(p_{1}, p_{2}\)</span> at <span class="math inline">\(s = -\frac{1}{\tau_{1}}, -\frac{1}{\tau_{2}}\)</span> for <span class="math inline">\(\tau_{1}, \tau_{2} = 1, \ 10\)</span>.</p>
 <p>With the transfer function properly constructed, we need only to call <code>control.bode_plot()</code> on it for a quick Bode diagram.</p>
-<div id="391fd50a" class="cell" data-execution_count="2">
+<div id="7e1e6598" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> ctrl.tf(<span class="st">'s'</span>) <span class="co"># define 's' as a TransferFunction class</span></span>
@@ -322,7 +322,7 @@ window.Quarto = {
 <p><span class="math display">\[G_{CL}(s) = \frac{G_v G_c G_p}{1 + G_v G_c G_p G_m} = \frac{K_{c} \Big( 1 + \frac{1}{\tau_I s} \Big) \frac{1}{(\tau_1 s + 1)(\tau_2 s + 1)}}{1 + K_{c} \Big( 1 + \frac{1}{\tau_I s} \Big) \frac{1}{(\tau_1 s + 1)(\tau_2 s + 1)}}\]</span></p>
 <p>This closed-loop had poles at <span class="math inline">\(s = 0, -1, -\frac{1}{2}\)</span>, a zero at <span class="math inline">\(s = -2\)</span>, a centroid at <span class="math inline">\(\sigma = \frac{1}{4}\)</span>, and the breakaway was <span class="math inline">\(s \approx -0.23\)</span></p>
 <p>It’s then straightforward to generate an initial root-locus diagram using <code>control.root_locus_plot()</code>!</p>
-<div id="0e005ba4" class="cell" data-execution_count="3">
+<div id="1dbfb7fe" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
@@ -426,7 +426,7 @@ Note
 <p>with a chosen value of <span class="math inline">\(\tau_I = 1/3\)</span>.</p>
 <p>We are told the product of our process and controller gains are non-zero, e.g.&nbsp;<span class="math inline">\(K_c K &gt; 0\)</span>, and from a previous example we want to look at the case where <span class="math inline">\(K_c K = 0.5\)</span></p>
 <p>The corresponding Bode plot is the following:</p>
-<div id="373e613d" class="cell" data-execution_count="4">
+<div id="3693536c" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="dv">1</span> <span class="co"># loop transfer function (process) gain</span></span>
@@ -452,7 +452,7 @@ Note
 </div>
 </div>
 </div>
-<div id="7b7c401d" class="cell" data-execution_count="5">
+<div id="04f7b8d9" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>table_md <span class="op">=</span> <span class="ss">f"""</span></span>
@@ -521,7 +521,7 @@ Important
 <p>if we have a standard unity feedback loop, the closed-loop response to a change in setpoint will be</p>
 <p><span class="math display">\[G_{CL,sp} = \frac{L(s)}{1 + L(s)}\]</span></p>
 <p>and for a step input, we see the following behavior.</p>
-<div id="3ba20c05" class="cell" data-execution_count="6">
+<div id="72d624f4" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">25</span>,num<span class="op">=</span><span class="dv">100</span>)</span>
@@ -541,7 +541,7 @@ Important
 <p>As we might expect, there’s an <strong>initial overshoot</strong>, <strong>oscillation about the step value</strong>, and then the system <strong>settles to our setpoint with no steady-state error</strong>.</p>
 <p>Now, let’s make use the calculated gain and phase margins to push this system to the brink of instability to confirm the behavior is as we expect!</p>
 <p>In this scenario, <span class="math inline">\((K_c K)_{new} = GM(K_c K)_{old}\)</span></p>
-<div id="16ffeb5d" class="cell" data-execution_count="7">
+<div id="b409dc0c" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">25</span>,num<span class="op">=</span><span class="dv">100</span>)</span>
@@ -562,7 +562,7 @@ Important
 </div>
 </div>
 </div>
-<div id="4029165e" class="cell" data-execution_count="8">
+<div id="420f5008" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>table_md <span class="op">=</span> <span class="ss">f"""</span></span>
@@ -622,7 +622,7 @@ Note
 </div>
 </div>
 <p>Finally, just to hit the concepts home, we’ll simulate what happens when we increase the gains even further, despite having no wiggle room.</p>
-<div id="91f930de" class="cell" data-execution_count="9">
+<div id="726f0bbc" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">25</span>,num<span class="op">=</span><span class="dv">100</span>)</span>
@@ -643,7 +643,7 @@ Note
 </div>
 </div>
 </div>
-<div id="7775caff" class="cell" data-execution_count="10">
+<div id="04294a39" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>table_md <span class="op">=</span> <span class="ss">f"""</span></span>
