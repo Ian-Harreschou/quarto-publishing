@@ -246,7 +246,7 @@ window.Quarto = {
 <hr>
 <p>This demonstration takes advantage of the <code>python-control</code> package to illustrate tools available for computational / numerical process modeling and control. This package implements basic operations for modeling linear, time-invariant (as well as nonlinear, discrete, and stochastic) control systems. Find the documentation for an installation guide and tutorials <a href="https://python-control.readthedocs.io/en/0.10.2/index.html">here</a>.<span class="math inline">\(^{[1]}\)</span></p>
 <hr>
-<div id="d0ad7365" class="cell" data-execution_count="1">
+<div id="ff61ce93" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preamble to import packages (renamed using 'import &lt;package&gt; as &lt;name&gt;')</span></span>
@@ -275,7 +275,7 @@ window.Quarto = {
 <p>Consider a transfer function <span class="math display">\[G(s) = \frac{1}{(\tau_{1}s + 1)(\tau_{2}s + 1)}\]</span></p>
 <p>with two poles <span class="math inline">\(p_{1}, p_{2}\)</span> at <span class="math inline">\(s = -\frac{1}{\tau_{1}}, -\frac{1}{\tau_{2}}\)</span> for <span class="math inline">\(\tau_{1}, \tau_{2} = 1, \ 10\)</span>.</p>
 <p>With the transfer function properly constructed, we need only to call <code>control.bode_plot()</code> on it for a quick Bode diagram.</p>
-<div id="8a4cc6a2" class="cell" data-execution_count="2">
+<div id="391fd50a" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> ctrl.tf(<span class="st">'s'</span>) <span class="co"># define 's' as a TransferFunction class</span></span>
@@ -295,8 +295,19 @@ window.Quarto = {
 </div>
 <p>At this point, we’ve seen and approximated many Bode plots. The key takeaways are:</p>
 <ol type="1">
-<li><p>the <strong>amplitude ratio</strong> represents the ratio of the output signal’s frequency to that of the input signal. Once we reach a frequency where <span class="math inline">\(AR &lt; 1\)</span>, then the output signal becomes more and more attenuated as we continue to increase frequency. In essence, the input begins oscillating so quickly that the output isn’t able to fully reach any maxima of the input – this is precisely the <mark>filtering effect</mark> we’ve discussed in the context of surge tanks that smooth incoming fluctuations in flowrate.</p></li>
-<li><p>the <strong>phase shift</strong> stems from the finite dynamics of the process, sensor, control elements, etc. The overall system can’t instantaneously respond to the input, and this manifests as a delay (which is also a function of frequency). We care about the conditions under which we cross <span class="math inline">\(-180^{\circ}\)</span> because at that point, our output signal is completely inverted relative to the input – maxima in input become minima in the output, which can be a problem for feedback schemes (depending on the magnitude at that point)!</p></li>
+<li>the <strong>amplitude ratio</strong> represents the ratio of the output signal’s frequency to that of the input signal.
+<ol type="i">
+<li>Once we reach a frequency where <span class="math inline">\(AR &lt; 1\)</span>, then the output signal becomes more and more attenuated as we continue to increase frequency.</li>
+<li>The input begins oscillating so quickly that the output isn’t able to fully reach any maxima of the input
+<ul>
+<li>this is precisely the <mark>filtering effect</mark> we’ve discussed in the context of surge tanks that smooth incoming fluctuations in flowrate.</li>
+</ul></li>
+</ol></li>
+<li>the <strong>phase shift</strong> stems from the finite dynamics of the process, sensor, control elements, etc. The overall system can’t instantaneously respond to the input, and this manifests as a delay
+<ol type="i">
+<li>The delay is a function of frequency, and it’s not just a constant shift that we would see in a system with delay time, e.g.&nbsp;<span class="math inline">\(G(s) \propto \exp^{-\tau_d s}\)</span>. Certain incoming frequencies are shifted less, and others more.</li>
+<li>We care about the conditions under which we cross <span class="math inline">\(-180^{\circ}\)</span> because at that point, our output signal is completely inverted relative to the input – maxima in input become minima in the output, which can be a problem for feedback schemes (depending on the magnitude at that point)!</li>
+</ol></li>
 </ol>
 <hr>
 </section>
@@ -311,7 +322,7 @@ window.Quarto = {
 <p><span class="math display">\[G_{CL}(s) = \frac{G_v G_c G_p}{1 + G_v G_c G_p G_m} = \frac{K_{c} \Big( 1 + \frac{1}{\tau_I s} \Big) \frac{1}{(\tau_1 s + 1)(\tau_2 s + 1)}}{1 + K_{c} \Big( 1 + \frac{1}{\tau_I s} \Big) \frac{1}{(\tau_1 s + 1)(\tau_2 s + 1)}}\]</span></p>
 <p>This closed-loop had poles at <span class="math inline">\(s = 0, -1, -\frac{1}{2}\)</span>, a zero at <span class="math inline">\(s = -2\)</span>, a centroid at <span class="math inline">\(\sigma = \frac{1}{4}\)</span>, and the breakaway was <span class="math inline">\(s \approx -0.23\)</span></p>
 <p>It’s then straightforward to generate an initial root-locus diagram using <code>control.root_locus_plot()</code>!</p>
-<div id="ed7e346b" class="cell" data-execution_count="3">
+<div id="0e005ba4" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Kc <span class="op">=</span> <span class="dv">1</span> <span class="co"># placeholder gain to use in tf construction</span></span>
@@ -362,21 +373,33 @@ Important
 <p>Phase and gain margins are quantitative measures of relative stability of closed-loop systems, or their ‘robustness’ to model uncertainty and process variation.<span class="math inline">\(^{[2]}\)</span></p>
 <p>These quantities essentially tell us how far away from <em>marginal stability</em> the system is, so that we can integrate some semblance of safety into operations.</p>
 <p>Quickly, we will review a few definitions, and then introduce the newer ones.</p>
-<p><strong>(Open) Loop transfer function <span class="math inline">\(L(s)\)</span></strong> – the product of the controller transfer function <span class="math inline">\(G_c(s)\)</span> with an overall process transfer function <span class="math inline">\(G(s)\)</span> (which includes the physical process, any sensors/measurement devices, and control elements such as valves).</p>
+<ul>
+<li><strong>(Open) Loop transfer function <span class="math inline">\(L(s)\)</span></strong> – the product of the controller transfer function <span class="math inline">\(G_c(s)\)</span> with an overall process transfer function <span class="math inline">\(G(s)\)</span> (which typically includes the physical process, any sensors/measurement devices, and control elements such as valves).</li>
+</ul>
 <p><span class="math display">\[L(s) = G_c(s)G_v(s)G_p(s)G_m(s) = G_c(s)G(s)\]</span></p>
-<p><strong>Marginal stability</strong> – the point at which we observe sustained (non-decaying) oscillations in our output, when the input to the system is a sinusoidal function. <span class="math display">\[1 + L(s=i \omega_u) = 0\]</span></p>
+<ul>
+<li><strong>Marginal stability</strong> – the point at which we observe sustained (non-decaying) oscillations in our output, when the input to the system is a sinusoidal function. <span class="math display">\[1 + L(s=i \omega_u) = 0\]</span></li>
+</ul>
 <p>Or,</p>
 <p><span class="math display">\[L(s = i \omega_u) = -1\]</span></p>
 <p>for an “ultimate” value of <span class="math inline">\(K_c = K_{cu}, \omega = \omega_{u}\)</span>, above which we become unstable, as the poles will begin moving into the right half of the <em>Re-Im</em> plane.</p>
-<p><strong>Phase crossover (or <em>critical</em>) frequency <span class="math inline">\(\omega_p\)</span></strong> – the frequency at which the phase of the loop transfer function becomes equal to <span class="math inline">\(-180 ^{\circ}\)</span>.</p>
+<ul>
+<li><strong>Phase crossover (or <em>critical</em>) frequency <span class="math inline">\(\omega_p\)</span></strong> – the frequency at which the phase of the loop transfer function becomes equal to <span class="math inline">\(-180 ^{\circ}\)</span>.</li>
+</ul>
 <p><span class="math display">\[ \omega_p : \angle {L(i \omega_p)} = -180 ^{\circ}\]</span></p>
-<p><strong>Gain crossover frequency <span class="math inline">\(\omega_g\)</span></strong> – the frequency at which the magnitude of <span class="math inline">\(L(s)\)</span> becomes equal to one,</p>
+<ul>
+<li><strong>Gain crossover frequency <span class="math inline">\(\omega_g\)</span></strong> – the frequency at which the magnitude of <span class="math inline">\(L(s)\)</span> becomes equal to one,</li>
+</ul>
 <p><span class="math display">\[ \omega_g : |L(i\omega_g)|=1\]</span></p>
 <p>With these, we can introduce the phase and gain margins.</p>
-<p><strong>Phase margin</strong> <em>PM</em> – the phase shift of the loop transfer function at <span class="math inline">\(\omega_g\)</span> necessary to cause the system to reach <em>marginal stability</em>.</p>
+<ul>
+<li><strong>Phase margin</strong> <em>PM</em> – the phase shift of the loop transfer function at <span class="math inline">\(\omega_g\)</span> necessary to cause the system to reach <em>marginal stability</em>.</li>
+</ul>
 <p>Another interpretation is the <em>distance</em> on the phase diagram between the current phase shift and <span class="math inline">\(-180^{\circ}\)</span>.</p>
 <p><span class="math display">\[PM = \arg \big \{ L(i \omega_g) \big \} - (-180^{\circ})\]</span></p>
-<p><strong>Gain margin</strong> <em>GM</em> – the factor by which we can scale/multiply the controller gain before the onset of instability</p>
+<ul>
+<li><strong>Gain margin</strong> <em>GM</em> – the factor by which we can scale/multiply the controller gain before the onset of instability</li>
+</ul>
 <p><span class="math display">\[GM = \frac{1}{|L(i \omega_p)|}\]</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -388,7 +411,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Remember that increasing <span class="math inline">\(K_c\)</span> shifts the amplitude ratio of our transfer function upward on a Bode diagram, while leaving the phase shift unchanged. The opposite is true for a system with time delay; the phase shift will necessarily change, but the magnitude will be left unmodified!</p>
+<p>Increasing <span class="math inline">\(K_c\)</span> shifts the amplitude ratio of our transfer function upward on a Bode diagram, while leaving the phase shift unchanged. The opposite is true for a system with time delay; the phase shift will necessarily change, but the magnitude will be left unmodified!</p>
 </div>
 </div>
 <p>A <mark>high gain margin</mark> corresponds to a system that is <mark>far away from instability</mark>, but there is a tradeoff, as our controller responds sluggishly.</p>
@@ -402,7 +425,8 @@ Note
 <p>Our controller has both P- and I-action, which will look like: <span class="math display">\[G_c(s) = K_c (1 + \frac{1}{\tau_I s})\]</span></p>
 <p>with a chosen value of <span class="math inline">\(\tau_I = 1/3\)</span>.</p>
 <p>We are told the product of our process and controller gains are non-zero, e.g.&nbsp;<span class="math inline">\(K_c K &gt; 0\)</span>, and from a previous example we want to look at the case where <span class="math inline">\(K_c K = 0.5\)</span></p>
-<div id="9d147bc7" class="cell" data-execution_count="4">
+<p>The corresponding Bode plot is the following:</p>
+<div id="373e613d" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="dv">1</span> <span class="co"># loop transfer function (process) gain</span></span>
@@ -428,7 +452,7 @@ Note
 </div>
 </div>
 </div>
-<div id="97d49f6b" class="cell" data-execution_count="5">
+<div id="7b7c401d" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>table_md <span class="op">=</span> <span class="ss">f"""</span></span>
@@ -471,8 +495,14 @@ Note
 </table>
 </div>
 </div>
-<p>Do we expect this open-loop transfer function to be step-stable? What might the “output” look like when we simulate a step input?</p>
-<p>How about for the fully-connected, closed-loop response?</p>
+<p>Since both of these quantities are geometric in nature (i.e.&nbsp;they’re distances), they can be visualized on our Bode plot as well, meaning we could estimate them fairly accurately with a well-drawn diagram.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="K&amp;K_fig17-2.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 17.7 of Ch 17.2, illustrating the gain and phase margins of the same open-loop function in the above example, overtop its Bode diagram. Both definitions use the two crossover frequencies <span class="math inline">\(\omega_g\)</span> and <span class="math inline">\(\omega_p\)</span> as anchor points.<span class="math inline">\(^{[2]}\)</span></figcaption>
+</figure>
+</div>
+<p>The next question to ask after all this might be: Do we expect the fully-connected, closed-loop response to be step-stable? What might the “output” look like when we simulate a step input?</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -483,15 +513,15 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Recall the poles of our <span class="math inline">\(L(s)\)</span> are purely real, and lie in the left-hand portion of the <em>Re-Im</em> plane.</p>
-<p><span class="math display">\[ L(s) = (1 + \frac{1}{\tau_I s}) \frac{K_c K}{(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} \]</span></p>
+<p>The poles of our <span class="math inline">\(L(s)\)</span> are purely real, and lie in the left-hand portion of the <em>Re-Im</em> plane.</p>
+</div>
+</div>
+<p>Taking our open-loop transfer function, <span class="math display">\[ L(s) = (1 + \frac{1}{\tau_I s}) \frac{K_c K}{(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} \]</span></p>
 <p><span class="math display">\[ = (\tau_I s + 1) \frac{K_c K}{(\tau_I s)(\tau_1s + 1)(\tau_2s + 1)(\tau_3s+1)} \]</span></p>
-</div>
-</div>
-<p>If we have a standard unity feedback loop, the closed-loop response to a change in setpoint will be:</p>
+<p>if we have a standard unity feedback loop, the closed-loop response to a change in setpoint will be</p>
 <p><span class="math display">\[G_{CL,sp} = \frac{L(s)}{1 + L(s)}\]</span></p>
 <p>and for a step input, we see the following behavior.</p>
-<div id="04ce3d7d" class="cell" data-execution_count="6">
+<div id="3ba20c05" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">25</span>,num<span class="op">=</span><span class="dv">100</span>)</span>
@@ -511,7 +541,7 @@ Important
 <p>As we might expect, there’s an <strong>initial overshoot</strong>, <strong>oscillation about the step value</strong>, and then the system <strong>settles to our setpoint with no steady-state error</strong>.</p>
 <p>Now, let’s make use the calculated gain and phase margins to push this system to the brink of instability to confirm the behavior is as we expect!</p>
 <p>In this scenario, <span class="math inline">\((K_c K)_{new} = GM(K_c K)_{old}\)</span></p>
-<div id="d5391a63" class="cell" data-execution_count="7">
+<div id="16ffeb5d" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">25</span>,num<span class="op">=</span><span class="dv">100</span>)</span>
@@ -532,7 +562,7 @@ Important
 </div>
 </div>
 </div>
-<div id="f7825505" class="cell" data-execution_count="8">
+<div id="4029165e" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>table_md <span class="op">=</span> <span class="ss">f"""</span></span>
@@ -575,10 +605,24 @@ Important
 </table>
 </div>
 </div>
+<p>In this response, we see <strong>non-decaying oscillations</strong> since our poles have been pushed such that they interesct the Im-axis, meaning now there is <strong>persistent steady-state error</strong>.</p>
 <p>Notice in this table, that the phase crossover frequency <span class="math inline">\(w_{pc}\)</span> did not change (indicating the phase shift of the system was unmodified), yet the gain crossover frequency <span class="math inline">\(w_{gc}\)</span> did! Additionally, these two are coincident at <span class="math inline">\(\omega = \sqrt(2)\)</span></p>
-<p>Also, we can see that <span class="math inline">\(GM = 1\)</span>, <span class="math inline">\(PM = 0^{\circ}\)</span>, indicating the gains can’t be scaled any further, and the system can’t handle any more time delay before becoming unstable.</p>
+<p>We see that <span class="math inline">\(GM = 1\)</span>, <span class="math inline">\(PM = 0^{\circ}\)</span>, indicating the gains shouldn’t be scaled further, and the system can’t handle any more time delay before becoming unstable.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Reiterating, <span class="math inline">\(PM\)</span> is how far the system is from realizing a phase shift of <span class="math inline">\(-180^{\circ}\)</span> (or a complete inverse of the incoming signal) for a given input frequency. This has implications on the stability of a feedback loop in which we use the output / measurement to inform controller action!</p>
+</div>
+</div>
 <p>Finally, just to hit the concepts home, we’ll simulate what happens when we increase the gains even further, despite having no wiggle room.</p>
-<div id="65e27152" class="cell" data-execution_count="9">
+<div id="91f930de" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">25</span>,num<span class="op">=</span><span class="dv">100</span>)</span>
@@ -589,9 +633,7 @@ Important
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>resp.plot(plot_inputs<span class="op">=</span><span class="st">'overlay'</span>, legend_map <span class="op">=</span> [<span class="st">'upper left'</span>], label <span class="op">=</span> [<span class="ss">f'$G_CL(t)$'</span>, <span class="ss">f'$u(t) = M(t)$'</span>])</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>gm, pm, sm, wpc, wgc, wms <span class="op">=</span> ctrl.stability_margins(L)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>ctrl.bode_plot(L)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>gm, pm, sm, wpc, wgc, wms <span class="op">=</span> ctrl.stability_margins(L)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -600,15 +642,8 @@ Important
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="control-plotting_files/figure-html/cell-10-output-2.png" width="520" height="475" class="figure-img"></p>
-</figure>
 </div>
-</div>
-</div>
-<div id="71900320" class="cell" data-execution_count="10">
+<div id="7775caff" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>table_md <span class="op">=</span> <span class="ss">f"""</span></span>
@@ -651,7 +686,9 @@ Important
 </table>
 </div>
 </div>
-<p>Since we’ve pushed the gains of the system and controller too far, now our gain margin is a factor less than 1, and our phase margin is negative.</p>
+<p>Since we’ve pushed the gains of the system and controller too far, we’ve interesct with and crossed over the imaginary axis, pushing the poles into the right-half of the <em>Re-Im</em> plane.</p>
+<p>At this point, our <mark>gain margin is a factor less than 1</mark>, telling us we need to backoff the controller gain to once again reach a stable system. Our <mark>phase margin is also negative</mark>, which is not a good sign either.</p>
+<p>In a real-world situation, this can lead to serious safety hazards, or at the very least damage to control infrastructure such as valves, by way of rapidly opening and closing them (to an ever-increasing degree)!</p>
 <hr>
 </section>
 </section>

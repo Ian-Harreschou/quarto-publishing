@@ -244,7 +244,7 @@ window.Quarto = {
 
 <hr>
 <p>This demonstration takes advantage of the <code>python-control</code> package to illustrate tools available for computational / numerical process modeling and control. This package implements basic operations for modeling linear, time-invariant (as well as nonlinear, discrete, and stochastic) control systems. Find the documentation for an installation guide and tutorials <a href="https://python-control.readthedocs.io/en/0.10.2/index.html">here</a>.<span class="math inline">\(^{[1]}\)</span></p>
-<div id="4ec692e4" class="cell" data-execution_count="1">
+<div id="aaded418" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preamble to import packages (renamed using 'import &lt;package&gt; as &lt;name&gt;')</span></span>
@@ -268,7 +268,7 @@ window.Quarto = {
 <p>Before we look at the behavior of transfer functions, we need to know how to construct them.</p>
 <p>In the <code>control</code> package we can do this a number of ways–such as via state-space representation–but one of the most intuitive or beginner-friendly methods is by defining our symbolic <span class="math inline">\(s\)</span>, then using standard algebraic operations to build the polynomials of the transfer function <span class="math inline">\(G(s)\)</span>.</p>
 <p><code>control</code> includes a “factory function” <code>tf()</code> to construct objects of the <code>TransferFunction</code> class for this purpose.</p>
-<div id="d48dc1ed" class="cell" data-execution_count="2">
+<div id="a8575bac" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> ctrl.tf(<span class="st">'s'</span>) <span class="co"># define 's' as a TransferFunction class</span></span>
@@ -280,7 +280,7 @@ window.Quarto = {
 <p><span class="math display">\[G(s) = \frac{1}{2s + 1}\]</span></p>
 <p>by using standard operations with the derivative operator ‘s’.</p>
 <p>If we wanted to add more information to the transfer function, e.g.&nbsp;a name, or particular tags for inputs/outputs, we can explicitly provide arrays of numbers representing the powers of ‘s’ in the numerator / denominator, then pass additional keywords for namings.</p>
-<div id="61eeb66a" class="cell" data-execution_count="3">
+<div id="d00c7a0c" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>num <span class="op">=</span> [<span class="fl">2.5</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span>
@@ -303,7 +303,7 @@ window.Quarto = {
 <section id="impulse-response" class="level4">
 <h4 class="anchored" data-anchor-id="impulse-response">Impulse Response</h4>
 <p>Consider an impulse signal at <span class="math inline">\(t_{0}=0\)</span> of size 1, such that our input <span class="math inline">\(u(t)=\delta(t)\)</span>:</p>
-<div id="fa7d01de" class="cell" data-execution_count="4">
+<div id="2a16163f" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
@@ -326,7 +326,7 @@ window.Quarto = {
 <section id="step-response" class="level4">
 <h4 class="anchored" data-anchor-id="step-response">Step Response</h4>
 <p>How will the system respond to a constant step input of the form <span class="math inline">\(u(t) = M\)</span>, with <span class="math inline">\(M = 1\)</span>:</p>
-<div id="83280607" class="cell" data-execution_count="5">
+<div id="cdc1e9c9" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
@@ -349,7 +349,7 @@ window.Quarto = {
 <section id="forced-response" class="level4">
 <h4 class="anchored" data-anchor-id="forced-response">Forced Response</h4>
 <p>We can also simulate how the process will respond to an arbitrary input, i.e.&nbsp;a ramp forcing function <span class="math inline">\(u(t) = t\)</span>:</p>
-<div id="80cd7ca9" class="cell" data-execution_count="6">
+<div id="755e8754" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Gp <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> ((s <span class="op">+</span> <span class="dv">2</span>)<span class="op">*</span>(s <span class="op">+</span> <span class="dv">1</span>)) <span class="co"># transfer function for a black-box process, with poles at s = -1, -2</span></span>
