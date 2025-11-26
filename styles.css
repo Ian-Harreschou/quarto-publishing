@@ -1,4 +1,4 @@
-/* Remove horizontal scrollbars caused by Quarto container clipping */
+/* Remove horizontal scrollbars on figures*/
 .quarto-content,
 .quarto-content .content,
 .quarto-content .figure,
@@ -17,4 +17,18 @@ div.figure {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* center figures */
+figure.quarto-figure,
+div.figure {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+figure.quarto-figure img {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
